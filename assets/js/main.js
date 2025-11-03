@@ -6,11 +6,7 @@ let isUserLoggedIn = true;
 document.addEventListener("DOMContentLoaded", function () {
     console.log('Tico Trips App Loaded - DOMContentLoaded');
 
-    // ----------------------------------------------------
-    // --- 1. MANEJO DE AUTENTICACIÓN (Login/Register) ---
-    // ----------------------------------------------------
-   
-    // Captura de eventos de submit para los formularios de autenticación
+    // --- 1. MANEJO DE AUTENTICACIÓN ---
     const loginForm = document.querySelector('#login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', submitAuthForm);
@@ -24,15 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
         businessRegisterForm.addEventListener('submit', submitAuthForm);
     }
 
-    // Manejo del cambio de pestañas de autenticación
     document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', handleAuthTabSwitch);
     });
 
-    // ----------------------------------------------------
-    // --- 2. MANEJO DE RECUPERACIÓN DE CUENTA ---
-    // ----------------------------------------------------
-   
+    // --- 2. MANEJO DE RECUPERACIÓN ---
     const forgotPasswordLink = document.querySelector('#forgot-password-link');
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', openRecoveryModal);
@@ -46,10 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         recoveryForm.addEventListener('submit', submitRecoveryForm);
     }
 
-    // ----------------------------------------------------
-    // --- 3. MANEJO DE FORMULARIOS ESPECÍFICOS ---
-    // ----------------------------------------------------
-   
+    // --- 3. MANEJO DE FORMULARIOS ---
     const businessApplicationForm = document.querySelector('#business-application-form');
     if (businessApplicationForm) {
         businessApplicationForm.addEventListener('submit', submitBusinessApplication);
@@ -72,16 +61,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById('user-profile-form') || document.getElementById('business-profile-form')) {
         loadUserProfileData();
     }    
-});
 
-// ------------------------------------------------------------------
-// --- FUNCIONES DE AUTENTICACIÓN Y REGISTRO ---
-// ------------------------------------------------------------------
+    // --- 4. RESERVACIONES ---
+    initReservas();
+});
 
 /**
  * Función genérica para enviar formularios de Autenticación.
- * Se ajusta para manejar la redirección del negocio.
- * @param {Event} event - El evento de submit del formulario.
  */
 const submitAuthForm = (event) => {
     event.preventDefault();
@@ -96,15 +82,10 @@ const submitAuthForm = (event) => {
    
     alert(`Formulario ${form.id} enviado. Procesando...`);
    
-    // LÓGICA DE REDIRECCIÓN Y ENLACE DE CORREO:
     if(form.id === 'business-register-form') {
         const businessEmail = data.correo;
         console.log(`Negocio registrado con correo: ${businessEmail}. Redirigiendo a formulario de aplicación.`);
-       
-        // Mensaje clave: el correo de registro se usará para contacto
         alert(`¡Registro de cuenta completado! Usaremos el correo ${businessEmail} para notificarle el estado de su aplicación.`);
-       
-        // ** REDIRECCIÓN SOLICITADA **
         window.location.href = 'business-application.html';
     }
 };
@@ -127,13 +108,8 @@ const handleAuthTabSwitch = (event) => {
     event.target.classList.remove('border-transparent', 'text-gray-500');
 };
 
-// ------------------------------------------------------------------
-// --- FUNCIONES DE RECUPERACIÓN DE CUENTA ---
-// ------------------------------------------------------------------
-
 /**
  * Abre el modal de recuperación de contraseña.
- * @param {Event} event - El evento de click.
  */
 const openRecoveryModal = (event) => {
     event.preventDefault();
@@ -150,7 +126,6 @@ const closeRecoveryModal = () => {
 
 /**
  * Maneja el envío del formulario de recuperación.
- * @param {Event} event - El evento de submit del formulario.
  */
 const submitRecoveryForm = (event) => {
     event.preventDefault();
@@ -160,20 +135,12 @@ const submitRecoveryForm = (event) => {
     const email = formData.get('correo');
    
     console.log(`Solicitud de recuperación para: ${email}`);
-   
-    // Simulación de respuesta de API: Preguntar el correo y enviar link
     alert(`Si la cuenta existe, se ha enviado un link de recuperación de contraseña al correo: ${email}.`);
-   
     closeRecoveryModal();
 };
 
-// ------------------------------------------------------------------
-// --- FUNCIÓN DE APLICACIÓN DE NEGOCIO ---
-// ------------------------------------------------------------------
-
 /**
  * Maneja el submit del Formulario de Aplicación de Negocio.
- * @param {Event} event - El evento de submit del formulario.
  */
 const submitBusinessApplication = (event) => {
     event.preventDefault();
@@ -185,10 +152,7 @@ const submitBusinessApplication = (event) => {
     console.log('Submitting Business Application Form (Certificación)');
     console.log("Data de Certificación (JSON, sin archivos):", JSON.stringify(data));
    
-    // Obtener el correo del negocio para el mensaje de confirmación
     const businessEmail = data.correo_negocio || 'el correo electrónico de registro';
-   
-    // Mensaje de alerta actualizado para incluir el tiempo de respuesta.
     alert(`
         ¡Solicitud Enviada!
         Su aplicación ha sido recibida y está en proceso de revisión administrativa.
@@ -196,10 +160,6 @@ const submitBusinessApplication = (event) => {
         al correo electrónico: ${businessEmail}.
     `);
 };
-
-// ------------------------------------------------------------------
-// --- FUNCIONES DE PERFIL Y VALIDACIÓN DE ROL ---
-// ------------------------------------------------------------------
 
 /**
  * Carga los datos del perfil y determina que vista mostrar.
@@ -261,7 +221,6 @@ const displayBusinessProfile = (data) => {
         form.elements['nombre_negocio_publico'].value = data.nombre_negocio_publico || '';
         form.elements['correo'].value = data.correo || '';
         form.elements['telefono'].value = data.telefono || '';
-       
         form.elements['provincia'].value = data.provincia || 'San José';
         form.elements['canton'].value = data.canton || '';
         form.elements['distrito'].value = data.distrito || '';
@@ -272,14 +231,8 @@ const displayBusinessProfile = (data) => {
     localStorage.setItem('business_current_name', data.nombre_negocio_publico);
 }
 
-
-// ------------------------------------------------------------------
-// --- FUNCIONES DE SUBMIT DE PERFILES ---
-// ------------------------------------------------------------------
-
 /**
  * Envía la actualización del Perfil de Usuario Básico.
- * Valida si el nombre legal ha cambiado.
  */
 const submitUserProfileForm = (event) => {
     event.preventDefault();
@@ -302,7 +255,6 @@ const submitUserProfileForm = (event) => {
 
 /**
  * Envía la actualización del Perfil de Negocio Certificado.
- * Valida si el nombre público ha cambiado.
  */
 const submitBusinessProfileForm = (event) => {
     event.preventDefault();
@@ -322,3 +274,162 @@ const submitBusinessProfileForm = (event) => {
    
     localStorage.setItem('business_current_name', data.nombre_negocio_publico);
 };
+
+// Sistema de reservas
+// Agregar validación de fechas disponibles
+function initReservas() {
+    const form = document.querySelector('#reservation-form');
+    if (form) {
+        form.addEventListener('submit', hacerReserva);
+        console.log('Form de reservas inicializado');
+    }
+
+    const filtro = document.querySelector('#status-filter');
+    if (filtro) {
+        filtro.addEventListener('change', filtrarPorEstado);
+    }
+
+    // precios con formato
+    document.querySelectorAll('[data-price]').forEach(elem => {
+        let precio = parseInt(elem.dataset.price);
+        if (!isNaN(precio)) {
+            elem.textContent = `₡${precio.toLocaleString()}`;
+        }
+    });
+}
+
+function mostrarMsg(msg, tipo = 'success') {
+    let main = document.querySelector('main');
+    if (!main) return;
+
+    let alerta = document.createElement('div');
+    alerta.className = `alert alert-${tipo} fade-in`;
+    alerta.innerHTML = `
+        <div class="flex justify-between items-center">
+            <span>${msg}</span>
+            <button class="close">×</button>
+        </div>
+    `;
+    
+    main.insertBefore(alerta, main.firstChild);
+    setTimeout(() => alerta.remove(), 5000);
+}
+
+// Sistema de cupones - mock de backend
+const cuponesDisponibles = {
+    'VERANO25': { descuento: 25, disponibles: 8, valido: true },
+    'TOUR30': { descuento: 30, disponibles: 15, valido: true },
+    'HOTEL40': { descuento: 40, disponibles: 0, valido: false }
+};
+
+function validarCupon(codigo) {
+    const cupon = cuponesDisponibles[codigo];
+    if (!cupon) {
+        return { valido: false, mensaje: 'Cupón no existe' };
+    }
+    if (!cupon.valido) {
+        return { valido: false, mensaje: 'Cupón no válido' };
+    }
+    if (cupon.disponibles <= 0) {
+        return { valido: false, mensaje: 'Cupón agotado' };
+    }
+    return { 
+        valido: true, 
+        descuento: cupon.descuento,
+        mensaje: `Cupón aplicado: ${cupon.descuento}% de descuento`
+    };
+}
+
+function aplicarDescuento(precio, descuento) {
+    return precio - (precio * (descuento / 100));
+}
+
+function hacerReserva(e) {
+    e.preventDefault();
+    let form = e.target;
+    
+    // revisar campos requeridos
+    let todoBien = true;
+    form.querySelectorAll('[required]').forEach(campo => {
+        if (!campo.value.trim()) {
+            campo.classList.add('border-red-500');
+            todoBien = false;
+        }
+    });
+
+    if (!todoBien) {
+        mostrarMsg('Hay campos incompletos', 'error');
+        return;
+    }
+
+    let datos = new FormData(form);
+    let reserva = Object.fromEntries(datos.entries());
+
+    // Validar cupón si existe
+    if (reserva.cupon) {
+        const resultadoCupon = validarCupon(reserva.cupon);
+        if (resultadoCupon.valido) {
+            reserva.descuento = resultadoCupon.descuento;
+            reserva.precioFinal = aplicarDescuento(reserva.precioOriginal, resultadoCupon.descuento);
+            mostrarMsg(resultadoCupon.mensaje, 'success');
+        } else {
+            mostrarMsg(resultadoCupon.mensaje, 'error');
+            return;
+        }
+    }
+    
+    console.log('Datos de reserva:', reserva);
+    mostrarMsg('¡Reserva recibida! Te contactaremos pronto.');
+    form.reset();
+}
+
+function filtrarPorEstado() {
+    let filtro = document.querySelector('#status-filter');
+    if (!filtro) return;
+
+    let estado = filtro.value;
+    let filas = document.querySelectorAll('#reservations-table tr[data-status]');
+    
+    filas.forEach(fila => {
+        fila.style.display = 
+            estado === 'all' || fila.dataset.status === estado 
+            ? '' 
+            : 'none';
+    });
+}
+
+// Funciones para gestión de cupones
+function filtrarCupones(categoria) {
+    const cupones = document.querySelectorAll('.cupon-card');
+    cupones.forEach(cupon => {
+        if (categoria === 'todos' || cupon.dataset.categoria === categoria) {
+            cupon.style.display = '';
+        } else {
+            cupon.style.display = 'none';
+        }
+    });
+}
+
+function actualizarDisponibilidadCupon(codigoCupon) {
+    // Simula verificación con backend
+    const cupon = cuponesDisponibles[codigoCupon];
+    if (cupon && cupon.disponibles > 0) {
+        cupon.disponibles--;
+        // Actualizar UI
+        const elementoCupon = document.querySelector(`[data-cupon="${codigoCupon}"]`);
+        if (elementoCupon) {
+            const contador = elementoCupon.querySelector('.cupon-contador');
+            if (contador) {
+                contador.textContent = `Quedan ${cupon.disponibles} cupones`;
+            }
+            if (cupon.disponibles === 0) {
+                elementoCupon.classList.add('agotado');
+                const botonCompra = elementoCupon.querySelector('.btn-comprar');
+                if (botonCompra) {
+                    botonCompra.disabled = true;
+                    botonCompra.textContent = 'Agotado';
+                }
+            }
+        }
+    }
+}
