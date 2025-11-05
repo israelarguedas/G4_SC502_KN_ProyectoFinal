@@ -1,4 +1,4 @@
-export class SearchService {
+export class GeoService {
   async getProvincias() {
     const response = await fetch("assets/js/apiMockup/infoGeografica.json");
     const provincias = await response.json();
