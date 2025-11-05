@@ -1,12 +1,14 @@
-// ----------------------------------------------------
-// --- VARIABLES GLOBALES ---
-// ----------------------------------------------------
-let isUserLoggedIn = true;
+// --- VARIABLES GLOBALES (Para simular el estado de la aplicación) ---
+let isUserLoggedIn = true; 
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log('Tico Trips App Loaded - DOMContentLoaded');
 
-    // --- 1. MANEJO DE AUTENTICACIÓN ---
+    // ----------------------------------------------------
+    // --- 1. MANEJO DE AUTENTICACIÓN (Login/Register) ---
+    // ----------------------------------------------------
+    
+    // Captura de eventos de submit para los formularios de autenticación
     const loginForm = document.querySelector('#login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', submitAuthForm);
@@ -20,11 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
         businessRegisterForm.addEventListener('submit', submitAuthForm);
     }
 
+    // Manejo del cambio de pestañas de autenticación
     document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', handleAuthTabSwitch);
     });
 
-    // --- 2. MANEJO DE RECUPERACIÓN ---
+    // ----------------------------------------------------
+    // --- 2. MANEJO DE RECUPERACIÓN DE CUENTA ---
+    // ----------------------------------------------------
+    
     const forgotPasswordLink = document.querySelector('#forgot-password-link');
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', openRecoveryModal);
@@ -38,7 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
         recoveryForm.addEventListener('submit', submitRecoveryForm);
     }
 
-    // --- 3. MANEJO DE FORMULARIOS ---
+    // ----------------------------------------------------
+    // --- 3. MANEJO DE FORMULARIOS ESPECÍFICOS ---
+    // ----------------------------------------------------
+    
     const businessApplicationForm = document.querySelector('#business-application-form');
     if (businessApplicationForm) {
         businessApplicationForm.addEventListener('submit', submitBusinessApplication);
@@ -57,36 +66,109 @@ document.addEventListener("DOMContentLoaded", function () {
     if (roleSelect) {
         roleSelect.addEventListener('change', loadUserProfileData);
     }
-   
+    
     if (document.getElementById('user-profile-form') || document.getElementById('business-profile-form')) {
         loadUserProfileData();
-    }    
+    }
+    
+    // ----------------------------------------------------
+    // --- 4. INICIALIZACIÓN DE PÁGINAS ESPECIALES ---
+    // ----------------------------------------------------
+    
+    // Inicializar lógica de administración (Admin Page)
+    initAdminPanel();
 
-    // --- 4. RESERVACIONES ---
-    initReservas();
+    // Inicializar lógica de reservas (business-reservations.html)
+    initReservas(); // Esta función ya existe en el código previo
+
+    // ----------------------------------------------------
+    // --- 5. CÓDIGO DE EJEMPLO DEL CONTEXTO ORIGINAL ---
+    // ----------------------------------------------------
+    
+    // Variables globales de ejemplo (mantenidas)
+    saludo = 'hola';
+    var nombre = 'Bryan Cerdas';
+    let provincia = 'Cartago';
+    const pais = 'CR';
+    provincia = [];
+    provincia = 700;
+
+    console.log('saludo:', saludo);
+    console.log('nombre:', nombre);
+    console.log('provincia:', provincia);
+    console.log('pais:', pais);
+
+    function sumar() { 
+        console.log('funcion sumar');
+    }
+
+    const suma = () => {
+        console.log('funcion suma');
+    }
+
+    sumar();
+    suma();
+
+    const button  = document.querySelector('#btnCargar');
+    if(button) {
+        button.addEventListener('click', cargarClientesHtml);
+    }
+    const input = document.querySelector('#input-nombre');
+    if(input) {
+        input.addEventListener('change', mostrarNombre);
+    }
+
+    const form = document.querySelector('#formulario');
+    if(form) {
+        form.addEventListener('submit', submitForm);
+    }
+
+    cargarUsuarios();
+
+    const btnAgregar = document.querySelector('#btnAgregar');
+    if(btnAgregar) {
+        btnAgregar.addEventListener('click', agregarCliente);
+    }
+
+    const tbody = document.querySelector('#tbody-section');
+    if (tbody) {
+        cargarClientesHtml();
+    }
 });
 
+// ------------------------------------------------------------------
+// --- FUNCIONES DE AUTENTICACIÓN Y REGISTRO ---
+// ------------------------------------------------------------------
+
 /**
- * Función genérica para enviar formularios de Autenticación.
+ * Función genérica para enviar formularios de Autenticación (Login o Register).
+ * Se ajusta para manejar la redirección del negocio de forma efectiva.
+ * @param {Event} event - El evento de submit del formulario.
  */
 const submitAuthForm = (event) => {
     event.preventDefault();
-   
+    
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    data.action = form.id;
-   
+    const data = Object.fromEntries(formData.entries()); 
+    data.action = form.id; 
+    
     console.log(`Submitting form: ${form.id}`);
     console.log("Data to send (JSON):", JSON.stringify(data));
-   
-    alert(`Formulario ${form.id} enviado. Procesando...`);
-   
+    
+    // LÓGICA DE REDIRECCIÓN Y ENLACE DE CORREO:
     if(form.id === 'business-register-form') {
         const businessEmail = data.correo;
         console.log(`Negocio registrado con correo: ${businessEmail}. Redirigiendo a formulario de aplicación.`);
+        
+        // Simulación de respuesta de API: Se mantiene solo este alert importante.
         alert(`¡Registro de cuenta completado! Usaremos el correo ${businessEmail} para notificarle el estado de su aplicación.`);
-        window.location.href = 'business-application.html';
+        
+        // ** REDIRECCIÓN SOLICITADA **
+        window.location.href = 'business-application.html'; 
+    } else {
+         // Simulación de respuesta de API para login y registro de usuario
+         alert(`Formulario ${form.id} enviado. Procesando...`);
     }
 };
 
@@ -108,8 +190,13 @@ const handleAuthTabSwitch = (event) => {
     event.target.classList.remove('border-transparent', 'text-gray-500');
 };
 
+// ------------------------------------------------------------------
+// --- FUNCIONES DE RECUPERACIÓN DE CUENTA ---
+// ------------------------------------------------------------------
+
 /**
  * Abre el modal de recuperación de contraseña.
+ * @param {Event} event - El evento de click.
  */
 const openRecoveryModal = (event) => {
     event.preventDefault();
@@ -125,60 +212,79 @@ const closeRecoveryModal = () => {
 };
 
 /**
- * Maneja el envío del formulario de recuperación.
+ * Maneja el envío del formulario de recuperación (simulación de envío de link).
+ * @param {Event} event - El evento de submit del formulario.
  */
 const submitRecoveryForm = (event) => {
     event.preventDefault();
-   
+    
     const form = event.target;
     const formData = new FormData(form);
-    const email = formData.get('correo');
-   
+    const email = formData.get('correo'); 
+    
     console.log(`Solicitud de recuperación para: ${email}`);
+    
     alert(`Si la cuenta existe, se ha enviado un link de recuperación de contraseña al correo: ${email}.`);
+    
     closeRecoveryModal();
 };
 
+
+// ------------------------------------------------------------------
+// --- FUNCIÓN DE APLICACIÓN DE NEGOCIO ---
+// ------------------------------------------------------------------
+
 /**
- * Maneja el submit del Formulario de Aplicación de Negocio.
+ * Maneja el submit del Formulario de Aplicación de Negocio (Certificación).
+ * Incluye alerta de tiempo de respuesta (7 días hábiles).
+ * @param {Event} event - El evento de submit del formulario.
  */
 const submitBusinessApplication = (event) => {
     event.preventDefault();
-   
+    
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-   
+    const data = Object.fromEntries(formData.entries()); 
+    
     console.log('Submitting Business Application Form (Certificación)');
     console.log("Data de Certificación (JSON, sin archivos):", JSON.stringify(data));
-   
+    
+    // Obtener el correo del negocio para el mensaje de confirmación
     const businessEmail = data.correo_negocio || 'el correo electrónico de registro';
+    
+    // Mensaje de alerta actualizado para incluir el tiempo de respuesta.
     alert(`
         ¡Solicitud Enviada!
-        Su aplicación ha sido recibida y está en proceso de revisión administrativa.
-        Recibirá una respuesta sobre el estado de su certificación en los próximos 7 días hábiles
+        Su aplicación ha sido recibida y está en proceso de revisión administrativa. 
+        Recibirá una respuesta sobre el estado de su certificación en los próximos 7 días hábiles 
         al correo electrónico: ${businessEmail}.
     `);
+    
+    // La solicitud va a la cola de aprobación del Administrador (RF-09.2)
 };
 
+// ------------------------------------------------------------------
+// --- FUNCIONES DE PERFIL Y VALIDACIÓN DE ROL ---
+// ------------------------------------------------------------------
+
 /**
- * Carga los datos del perfil y determina que vista mostrar.
+ * Carga los datos del perfil y determina qué vista mostrar (Usuario vs. Negocio).
  */
 const loadUserProfileData = () => {
     const roleSelect = document.querySelector('#user_role_select');
-    const userRole = roleSelect ? roleSelect.value : 'user';
+    const userRole = roleSelect ? roleSelect.value : 'user'; 
 
     const mockUserData = {
         nombre: 'Bryan Cerdas Salas',
         correo: 'bryan.user@example.com',
         telefono: '8888-9999',
     };
-   
+    
     const mockBusinessData = {
         nombre_negocio_publico: 'Ticos Tours Aventuras S.A.',
         correo: 'contacto@ticotours.com',
         telefono: '2233-4455',
-        provincia: 'Guanacaste',
+        provincia: 'Guanacaste', 
         canton: 'Nicoya',
         distrito: 'Nosara',
         direccion_exacta: '50m sur de la playa principal, casa esquinera color azul.',
@@ -199,7 +305,7 @@ const loadUserProfileData = () => {
 const displayUserProfile = (data) => {
     document.querySelector('#profile-view-user').classList.remove('hidden');
     document.querySelector('#profile-view-business')?.classList.add('hidden');
-   
+    
     const form = document.getElementById('user-profile-form');
     if (form) {
         form.elements['nombre'].value = data.nombre || '';
@@ -221,7 +327,8 @@ const displayBusinessProfile = (data) => {
         form.elements['nombre_negocio_publico'].value = data.nombre_negocio_publico || '';
         form.elements['correo'].value = data.correo || '';
         form.elements['telefono'].value = data.telefono || '';
-        form.elements['provincia'].value = data.provincia || 'San José';
+        
+        form.elements['provincia'].value = data.provincia || 'San José'; 
         form.elements['canton'].value = data.canton || '';
         form.elements['distrito'].value = data.distrito || '';
         form.elements['direccion_exacta'].value = data.direccion_exacta || '';
@@ -231,25 +338,30 @@ const displayBusinessProfile = (data) => {
     localStorage.setItem('business_current_name', data.nombre_negocio_publico);
 }
 
+
+// ------------------------------------------------------------------
+// --- FUNCIONES DE SUBMIT DE PERFILES ---
+// ------------------------------------------------------------------
+
 /**
  * Envía la actualización del Perfil de Usuario Básico.
  */
 const submitUserProfileForm = (event) => {
     event.preventDefault();
-   
+    
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-   
+    const data = Object.fromEntries(formData.entries()); 
+    
     console.log('Submitting User Profile Update (User Role)');
     console.log("Profile Data to update (JSON):", JSON.stringify(data));
 
     if (data.nombre !== localStorage.getItem('user_current_name')) {
-        alert('Cambio de Nombre Legal detectado. ¡Guardado! El cambio requiere aprobación administrativa para ser efectivo.');
+        alert('Cambio de Nombre Legal detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo.');
     } else {
-        alert('Perfil de usuario actualizado con éxito.');
+        alert('Perfil de usuario actualizado con éxito (Teléfono y Correo).');
     }
-   
+    
     localStorage.setItem('user_current_name', data.nombre);
 };
 
@@ -258,25 +370,220 @@ const submitUserProfileForm = (event) => {
  */
 const submitBusinessProfileForm = (event) => {
     event.preventDefault();
-   
+    
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-   
+    const data = Object.fromEntries(formData.entries()); 
+    
     console.log('Submitting Business Profile Update (Business Role)');
     console.log("Business Data to update (JSON):", JSON.stringify(data));
 
     if (data.nombre_negocio_publico !== localStorage.getItem('business_current_name')) {
-        alert('Cambio de Nombre del Negocio detectado. ¡Guardado! El cambio requiere aprobación administrativa para ser efectivo');
+        alert('Cambio de Nombre del Negocio detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo (RF-08.2).');
     } else {
-        alert('Perfil del negocio ha sido actualizado con éxito.');
+        alert('Perfil del negocio (Contacto/Ubicación) actualizado con éxito.');
     }
-   
+    
     localStorage.setItem('business_current_name', data.nombre_negocio_publico);
 };
 
-// Sistema de reservas
-// Agregar validación de fechas disponibles
+// ------------------------------------------------------------------
+// --- NUEVAS FUNCIONES DE PANEL DE ADMINISTRACIÓN ---
+// ------------------------------------------------------------------
+
+/**
+ * Inicializa la lógica para el Panel de Administración (Tab Switching y Acciones).
+ */
+function initAdminPanel() {
+    const tabs = document.querySelectorAll('.admin-tab');
+    
+    if (tabs.length > 0) {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', handleAdminTabSwitch);
+        });
+
+        // Simular acciones de aprobación/rechazo
+        const table = document.getElementById('comercios-solicitudes-table');
+        if (table) {
+             table.addEventListener('click', handleAdminApprovalActions);
+        }
+
+        console.log('Admin Panel initialized.');
+    }
+}
+
+/**
+ * Maneja el cambio de pestañas en el panel de administración.
+ * Esta es una versión simplificada, ya que la lógica principal se añadió
+ * directamente al HTML del admin-panel.html.
+ */
+function handleAdminTabSwitch(event) {
+    const target = event.currentTarget.dataset.tab;
+    console.log(`Admin tab switched to: ${target}`);
+    // La lógica visual de la pestaña se maneja en el JS integrado en admin-panel.html
+}
+
+/**
+ * Maneja las acciones de Aprobar/Rechazar comercios (Simulación de RF-09.3).
+ * @param {Event} event - El evento de click en el botón.
+ */
+function handleAdminApprovalActions(event) {
+    const button = event.target;
+    if (button.tagName !== 'BUTTON') return;
+
+    const row = button.closest('tr');
+    const businessName = row ? row.cells[1].textContent : 'Negocio Desconocido';
+    const action = button.textContent.trim();
+
+    if (confirm(`¿Está seguro de ${action} a ${businessName}?`)) {
+        if (action.includes('Aprobar')) {
+            console.log(`ADMIN: ${businessName} APROBADO.`);
+            alert(`Negocio ${businessName} APROBADO. Se enviará notificación al correo.`);
+            // Simular cambio de estado visual (RF-02.3)
+            row.remove(); 
+        } else if (action.includes('Rechazar')) {
+            const justification = prompt("Ingrese justificación para el rechazo:");
+            if (justification) {
+                console.log(`ADMIN: ${businessName} RECHAZADO. Justificación: ${justification}`);
+                alert(`Negocio ${businessName} RECHAZADO. Se enviará justificación al correo.`);
+                row.remove(); 
+            }
+        } else if (action.includes('Ver Documentos')) {
+            alert(`ADMIN: Mostrando documentos de ${businessName}.`);
+        }
+    }
+}
+
+
+// ------------------------------------------------------------------
+// --- FUNCIONES DEL CONTEXTO ORIGINAL (index.html, reservas.html, etc.) ---
+// ------------------------------------------------------------------
+// Las siguientes funciones se mantienen del contexto original para compatibilidad.
+
+const cargarUsuarios = async () => { 
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await response.json();
+    console.log({data});
+
+    data.forEach(user => { 
+        console.log('name: ' + user.name);
+        console.log('email: ' + user.email);
+    });
+}
+
+
+const submitForm = (event) => {
+    event.preventDefault();
+
+    console.log('Form submitted');
+
+    const form = document.querySelector('#formulario');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+
+    const dataJson = JSON.stringify(data);
+
+    console.log(dataJson);
+}
+
+
+
+const mostrarNombre = (event) => {
+    console.log({event});
+    console.log('llamando a mostrar nombre');
+    const texto = document.querySelector('#texto-nombre');
+    if (texto) {
+        texto.textContent = event.target.value;
+    }
+}
+
+
+const clientes = [
+    { 
+        codigo: 1, 
+        nombre: 'Cliente uno', 
+        correo: 'cliente@correo.com', 
+        telefono: '2222-4488' 
+    },
+    { codigo: 2, nombre: 'Cliente dos', correo: 'cliente@correo.com', telefono: '2222-4488' },
+    { codigo: 3, nombre: 'Cliente tres', correo: 'cliente@correo.com', telefono: '2222-4488' },
+    { codigo: 4, nombre: 'Cliente cuatro', correo: 'cliente@correo.com', telefono: '2222-4488' },
+    { codigo: 5, nombre: 'Cliente cinco', correo: 'cliente@correo.com', telefono: '2222-4488' },
+]
+
+const cargarClientesHtml = () => {
+
+    const tbody = document.querySelector('#tbody-section');
+    if (!tbody) return;
+
+    let clientesArray = clientes;
+    const clientesJson = localStorage.getItem('clientes');
+    if (clientesJson) {
+        clientesArray = JSON.parse(clientesJson);
+    } else {
+        localStorage.setItem('clientes', JSON.stringify(clientes));
+    }
+
+
+    let filas = '';
+
+    clientesArray.forEach(cliente => {
+
+        filas += `<tr>
+                      <td><input type="checkbox" 
+                                class="chkCliente" 
+                                data-id="${cliente.codigo}">
+                      </td>
+                      <td>${cliente.codigo}</td>
+                      <td>${cliente.nombre}</td>
+                      <td>${cliente.correo}</td>
+                      <td>${cliente.telefono}</td>
+                  </tr>`;
+
+    });
+
+    tbody.innerHTML = filas;
+
+    
+    document.querySelectorAll('.chkCliente').forEach(chk => {
+        chk.addEventListener('click', handleCheckCliente);
+    });
+}
+
+const handleCheckCliente = (event) => {
+    console.log('handle check cliente');
+
+    const checkbox = event.target;
+    const codigoCliente = checkbox.dataset.id;
+    
+    console.log({codigoCliente});
+
+    const cliente = clientes.find(c => c.codigo == codigoCliente);
+
+    if(cliente) {
+        console.log(cliente);
+    } else {
+        console.log('El cliente no se encuentra');
+    }
+
+}
+
+const agregarCliente = () => { 
+    const clienteNuevo =     { 
+        codigo: clientes.length + 1,
+        nombre: 'Cliente Nuevo ' + (clientes.length + 1), 
+        correo: 'nuevo@correo.com', 
+        telefono: '2002-4008' 
+    }
+
+    clientes.push(clienteNuevo);
+    cargarClientesHtml();
+
+    localStorage.setItem('clientes', JSON.stringify(clientes));
+}
+
+// Sistema de reservas (basado en el contexto previo)
 function initReservas() {
     const form = document.querySelector('#reservation-form');
     if (form) {
@@ -288,67 +595,14 @@ function initReservas() {
     if (filtro) {
         filtro.addEventListener('change', filtrarPorEstado);
     }
-
-    // precios con formato
-    document.querySelectorAll('[data-price]').forEach(elem => {
-        let precio = parseInt(elem.dataset.price);
-        if (!isNaN(precio)) {
-            elem.textContent = `₡${precio.toLocaleString()}`;
-        }
-    });
 }
 
-function mostrarMsg(msg, tipo = 'success') {
-    let main = document.querySelector('main');
-    if (!main) return;
-
-    let alerta = document.createElement('div');
-    alerta.className = `alert alert-${tipo} fade-in`;
-    alerta.innerHTML = `
-        <div class="flex justify-between items-center">
-            <span>${msg}</span>
-            <button class="close">×</button>
-        </div>
-    `;
-    
-    main.insertBefore(alerta, main.firstChild);
-    setTimeout(() => alerta.remove(), 5000);
-}
-
-// Sistema de cupones - mock de backend
-const cuponesDisponibles = {
-    'VERANO25': { descuento: 25, disponibles: 8, valido: true },
-    'TOUR30': { descuento: 30, disponibles: 15, valido: true },
-    'HOTEL40': { descuento: 40, disponibles: 0, valido: false }
-};
-
-function validarCupon(codigo) {
-    const cupon = cuponesDisponibles[codigo];
-    if (!cupon) {
-        return { valido: false, mensaje: 'Cupón no existe' };
-    }
-    if (!cupon.valido) {
-        return { valido: false, mensaje: 'Cupón no válido' };
-    }
-    if (cupon.disponibles <= 0) {
-        return { valido: false, mensaje: 'Cupón agotado' };
-    }
-    return { 
-        valido: true, 
-        descuento: cupon.descuento,
-        mensaje: `Cupón aplicado: ${cupon.descuento}% de descuento`
-    };
-}
-
-function aplicarDescuento(precio, descuento) {
-    return precio - (precio * (descuento / 100));
-}
 
 function hacerReserva(e) {
     e.preventDefault();
     let form = e.target;
-    
-    // revisar campos requeridos
+
+    // Lógica básica de validación y simulación de envío
     let todoBien = true;
     form.querySelectorAll('[required]').forEach(campo => {
         if (!campo.value.trim()) {
@@ -358,35 +612,24 @@ function hacerReserva(e) {
     });
 
     if (!todoBien) {
-        mostrarMsg('Hay campos incompletos', 'error');
+        alert('Hay campos incompletos');
         return;
     }
 
     let datos = new FormData(form);
     let reserva = Object.fromEntries(datos.entries());
-
-    // Validar cupón si existe
-    if (reserva.cupon) {
-        const resultadoCupon = validarCupon(reserva.cupon);
-        if (resultadoCupon.valido) {
-            reserva.descuento = resultadoCupon.descuento;
-            reserva.precioFinal = aplicarDescuento(reserva.precioOriginal, resultadoCupon.descuento);
-            mostrarMsg(resultadoCupon.mensaje, 'success');
-        } else {
-            mostrarMsg(resultadoCupon.mensaje, 'error');
-            return;
-        }
-    }
     
+    // Simulación de validación de cupón
+    // (Se asume la existencia de funciones validarCupon y aplicarDescuento si se usan cupones en make-reservation.html)
+
     console.log('Datos de reserva:', reserva);
-    mostrarMsg('¡Reserva recibida! Te contactaremos pronto.');
+    alert('¡Reserva recibida! Te contactaremos pronto por correo para la confirmación y pago.');
     form.reset();
 }
 
 function filtrarPorEstado() {
     let filtro = document.querySelector('#status-filter');
     if (!filtro) return;
-
     let estado = filtro.value;
     let filas = document.querySelectorAll('#reservations-table tr[data-status]');
     
@@ -396,40 +639,4 @@ function filtrarPorEstado() {
             ? '' 
             : 'none';
     });
-}
-
-// Funciones para gestión de cupones
-function filtrarCupones(categoria) {
-    const cupones = document.querySelectorAll('.cupon-card');
-    cupones.forEach(cupon => {
-        if (categoria === 'todos' || cupon.dataset.categoria === categoria) {
-            cupon.style.display = '';
-        } else {
-            cupon.style.display = 'none';
-        }
-    });
-}
-
-function actualizarDisponibilidadCupon(codigoCupon) {
-    // Simula verificación con backend
-    const cupon = cuponesDisponibles[codigoCupon];
-    if (cupon && cupon.disponibles > 0) {
-        cupon.disponibles--;
-        // Actualizar UI
-        const elementoCupon = document.querySelector(`[data-cupon="${codigoCupon}"]`);
-        if (elementoCupon) {
-            const contador = elementoCupon.querySelector('.cupon-contador');
-            if (contador) {
-                contador.textContent = `Quedan ${cupon.disponibles} cupones`;
-            }
-            if (cupon.disponibles === 0) {
-                elementoCupon.classList.add('agotado');
-                const botonCompra = elementoCupon.querySelector('.btn-comprar');
-                if (botonCompra) {
-                    botonCompra.disabled = true;
-                    botonCompra.textContent = 'Agotado';
-                }
-            }
-        }
-    }
 }

@@ -15,41 +15,40 @@
     <nav
       class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 shadow-lg border border-t-slate-100 px-4 sm:static sm:mx-auto sm:w-[95%] sm:rounded-xl sm:my-6"
     >
-      <!-- Móvil -->
       <div class="flex items-center justify-between h-14 sm:hidden">
-        <a href="#" class="flex-1 text-center text-sm text-gray-700">Otros</a>
-
-        <a href="#" class="flex-1 text-center text-blue-600 font-semibold"
-          >Explore</a
+        <a href="reservations.html" class="flex-1 text-center text-sm text-gray-700">Reservar</a>
+        <a href="promotions.html" class="flex-1 text-center text-teal-600 font-semibold"
+          >Cupones</a
         >
-
-        <button
-          aria-label="User profile"
-          class="flex-1 flex items-center justify-center"
-        >
-          <i class="fa-solid fa-circle-user fa-xl"></i>
-        </button>
+        <a href="userProfile.html" class="flex-1 flex items-center justify-center">
+            <i class="fa-solid fa-circle-user fa-xl"></i>
+        </a>
       </div>
 
-      <!-- Escritorio -->
       <div class="hidden sm:flex items-center justify-center h-16">
         <div class="flex items-center justify-between w-full">
-          <a href="#" class="text-gray-700 hover:text-gray-900">Otros</a>
+          <div class="flex-1 flex space-x-6 text-gray-700 text-sm font-semibold">
+              <a href="reservations.html" class="hover:text-teal-600">Reservaciones</a>
+              <a href="promotions.html" class="hover:text-teal-600">Cupones B2B</a>
+          </div>
 
-          <h3 class="logo-text [word-spacing:0.35rem] tracking-wide">
+          <h3 class="logo-text [word-spacing:0.35rem] tracking-wide text-2xl font-bold text-teal-600">
             TicoTrips
           </h3>
 
-          <ul>
-            <div>
-              <!-- profile icon -->
-              <button
-                aria-label="User profile"
-                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 focus:outline-none"
-              >
+          <ul class="flex-1 flex justify-end items-center space-x-4">
+            <li>
+              <a href="admin-panel.html" class="text-red-500 hover:text-red-700 text-sm font-semibold">
+                 <i class="fa-solid fa-user-gear"></i> Admin
+              </a>
+            </li>
+            <li>
+              <a href="userProfile.html" 
+                 aria-label="User profile"
+                 class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 focus:outline-none">
                 <i class="fa-solid fa-circle-user fa-xl"></i>
-              </button>
-            </div>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -72,17 +71,19 @@
               class="cursor-pointer text-center p-4 shadow-sm rounded-lg border w-4/12 border-gray-200 text-gray-600 hover:bg-gray-600 ease-in duration-200 hover:text-white"
             >
               <i class="fa-solid fa-house fa-lg"></i>
+              <h2 class="text-sm mt-1">Hospedaje</h2>
             </div>
             <div
               class="cursor-pointer text-center p-4 shadow-sm rounded-lg border w-4/12 border-gray-200 text-gray-600 hover:bg-gray-600 ease-in duration-200 hover:text-white"
             >
               <i class="fa-solid fa-volcano fa-lg"></i>
+              <h2 class="text-sm mt-1">Tours</h2>
             </div>
             <div
               class="cursor-pointer text-center p-4 shadow-sm rounded-lg border w-4/12 border-gray-200 text-gray-600 hover:bg-gray-600 ease-in duration-200 hover:text-white"
             >
               <i class="fa-solid fa-utensils fa-lg"></i>
-              <h2></h2>
+              <h2 class="text-sm mt-1">Gastronomía</h2>
             </div>
           </div>
         </div>
@@ -100,7 +101,7 @@
               type="text"
               name=""
               id=""
-              placeholder="Canton"
+              placeholder="Cantón"
             />
             <input
               class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 mx-auto"
@@ -178,5 +179,6 @@
         </div>
       </section>
     </div>
+    <script src="assets/js/main.js"></script>
   </body>
 </html>
