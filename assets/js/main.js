@@ -1,139 +1,157 @@
+import { handleSearch } from "./handlers/searchHandler.js";
+
 // --- VARIABLES GLOBALES (Para simular el estado de la aplicación) ---
-let isUserLoggedIn = true; 
+let isUserLoggedIn = true;
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log('Tico Trips App Loaded - DOMContentLoaded');
+document.addEventListener("DOMContentLoaded", async function () {
+  console.log("Tico Trips App Loaded - DOMContentLoaded");
 
-    // ----------------------------------------------------
-    // --- 1. MANEJO DE AUTENTICACIÓN (Login/Register) ---
-    // ----------------------------------------------------
-    
-    // Captura de eventos de submit para los formularios de autenticación
-    const loginForm = document.querySelector('#login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', submitAuthForm);
-    }
-    const userRegisterForm = document.querySelector('#user-register-form');
-    if (userRegisterForm) {
-        userRegisterForm.addEventListener('submit', submitAuthForm);
-    }
-    const businessRegisterForm = document.querySelector('#business-register-form');
-    if (businessRegisterForm) {
-        businessRegisterForm.addEventListener('submit', submitAuthForm);
-    }
+  try {
+    handleSearch();
+  } catch (error) {
+    console.log(error);
+  }
 
-    // Manejo del cambio de pestañas de autenticación
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', handleAuthTabSwitch);
-    });
+  // ----------------------------------------------------
+  // --- 1. MANEJO DE AUTENTICACIÓN (Login/Register) ---
+  // ----------------------------------------------------
 
-    // ----------------------------------------------------
-    // --- 2. MANEJO DE RECUPERACIÓN DE CUENTA ---
-    // ----------------------------------------------------
-    
-    const forgotPasswordLink = document.querySelector('#forgot-password-link');
-    if (forgotPasswordLink) {
-        forgotPasswordLink.addEventListener('click', openRecoveryModal);
-    }
-    const closeRecoveryBtn = document.querySelector('#close-recovery-modal');
-    if (closeRecoveryBtn) {
-        closeRecoveryBtn.addEventListener('click', closeRecoveryModal);
-    }
-    const recoveryForm = document.querySelector('#recovery-form');
-    if (recoveryForm) {
-        recoveryForm.addEventListener('submit', submitRecoveryForm);
-    }
+  // Captura de eventos de submit para los formularios de autenticación
+  const loginForm = document.querySelector("#login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", submitAuthForm);
+  }
+  const userRegisterForm = document.querySelector("#user-register-form");
+  if (userRegisterForm) {
+    userRegisterForm.addEventListener("submit", submitAuthForm);
+  }
+  const businessRegisterForm = document.querySelector(
+    "#business-register-form"
+  );
+  if (businessRegisterForm) {
+    businessRegisterForm.addEventListener("submit", submitAuthForm);
+  }
 
-    // ----------------------------------------------------
-    // --- 3. MANEJO DE FORMULARIOS ESPECÍFICOS ---
-    // ----------------------------------------------------
-    
-    const businessApplicationForm = document.querySelector('#business-application-form');
-    if (businessApplicationForm) {
-        businessApplicationForm.addEventListener('submit', submitBusinessApplication);
-    }
+  // Manejo del cambio de pestañas de autenticación
+  document.querySelectorAll(".tab-button").forEach((button) => {
+    button.addEventListener("click", handleAuthTabSwitch);
+  });
 
-    const userProfileForm = document.querySelector('#user-profile-form');
-    if (userProfileForm) {
-        userProfileForm.addEventListener('submit', submitUserProfileForm);
-    }
-    const businessProfileForm = document.querySelector('#business-profile-form');
-    if (businessProfileForm) {
-        businessProfileForm.addEventListener('submit', submitBusinessProfileForm);
-    }
+  // ----------------------------------------------------
+  // --- 2. MANEJO DE RECUPERACIÓN DE CUENTA ---
+  // ----------------------------------------------------
 
-    const roleSelect = document.querySelector('#user_role_select');
-    if (roleSelect) {
-        roleSelect.addEventListener('change', loadUserProfileData);
-    }
-    
-    if (document.getElementById('user-profile-form') || document.getElementById('business-profile-form')) {
-        loadUserProfileData();
-    }
-    
-    // ----------------------------------------------------
-    // --- 4. INICIALIZACIÓN DE PÁGINAS ESPECIALES ---
-    // ----------------------------------------------------
-    
-    // Inicializar lógica de administración (Admin Page)
-    initAdminPanel();
+  const forgotPasswordLink = document.querySelector("#forgot-password-link");
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener("click", openRecoveryModal);
+  }
+  const closeRecoveryBtn = document.querySelector("#close-recovery-modal");
+  if (closeRecoveryBtn) {
+    closeRecoveryBtn.addEventListener("click", closeRecoveryModal);
+  }
+  const recoveryForm = document.querySelector("#recovery-form");
+  if (recoveryForm) {
+    recoveryForm.addEventListener("submit", submitRecoveryForm);
+  }
 
-    // Inicializar lógica de reservas (business-reservations.html)
-    initReservas(); // Esta función ya existe en el código previo
+  // ----------------------------------------------------
+  // --- 3. MANEJO DE FORMULARIOS ESPECÍFICOS ---
+  // ----------------------------------------------------
 
-    // ----------------------------------------------------
-    // --- 5. CÓDIGO DE EJEMPLO DEL CONTEXTO ORIGINAL ---
-    // ----------------------------------------------------
-    
-    // Variables globales de ejemplo (mantenidas)
-    saludo = 'hola';
-    var nombre = 'Bryan Cerdas';
-    let provincia = 'Cartago';
-    const pais = 'CR';
-    provincia = [];
-    provincia = 700;
+  const businessApplicationForm = document.querySelector(
+    "#business-application-form"
+  );
+  if (businessApplicationForm) {
+    businessApplicationForm.addEventListener(
+      "submit",
+      submitBusinessApplication
+    );
+  }
 
-    console.log('saludo:', saludo);
-    console.log('nombre:', nombre);
-    console.log('provincia:', provincia);
-    console.log('pais:', pais);
+  const userProfileForm = document.querySelector("#user-profile-form");
+  if (userProfileForm) {
+    userProfileForm.addEventListener("submit", submitUserProfileForm);
+  }
+  const businessProfileForm = document.querySelector("#business-profile-form");
+  if (businessProfileForm) {
+    businessProfileForm.addEventListener("submit", submitBusinessProfileForm);
+  }
 
-    function sumar() { 
-        console.log('funcion sumar');
-    }
+  const roleSelect = document.querySelector("#user_role_select");
+  if (roleSelect) {
+    roleSelect.addEventListener("change", loadUserProfileData);
+  }
 
-    const suma = () => {
-        console.log('funcion suma');
-    }
+  if (
+    document.getElementById("user-profile-form") ||
+    document.getElementById("business-profile-form")
+  ) {
+    loadUserProfileData();
+  }
 
-    sumar();
-    suma();
+  // ----------------------------------------------------
+  // --- 4. INICIALIZACIÓN DE PÁGINAS ESPECIALES ---
+  // ----------------------------------------------------
 
-    const button  = document.querySelector('#btnCargar');
-    if(button) {
-        button.addEventListener('click', cargarClientesHtml);
-    }
-    const input = document.querySelector('#input-nombre');
-    if(input) {
-        input.addEventListener('change', mostrarNombre);
-    }
+  // Inicializar lógica de administración (Admin Page)
+  initAdminPanel();
 
-    const form = document.querySelector('#formulario');
-    if(form) {
-        form.addEventListener('submit', submitForm);
-    }
+  // Inicializar lógica de reservas (business-reservations.html)
+  initReservas(); // Esta función ya existe en el código previo
 
-    cargarUsuarios();
+  // ----------------------------------------------------
+  // --- 5. CÓDIGO DE EJEMPLO DEL CONTEXTO ORIGINAL ---
+  // ----------------------------------------------------
 
-    const btnAgregar = document.querySelector('#btnAgregar');
-    if(btnAgregar) {
-        btnAgregar.addEventListener('click', agregarCliente);
-    }
+  // Variables globales de ejemplo (mantenidas)
+  saludo = "hola";
+  var nombre = "Bryan Cerdas";
+  let provincia = "Cartago";
+  const pais = "CR";
+  provincia = [];
+  provincia = 700;
 
-    const tbody = document.querySelector('#tbody-section');
-    if (tbody) {
-        cargarClientesHtml();
-    }
+  console.log("saludo:", saludo);
+  console.log("nombre:", nombre);
+  console.log("provincia:", provincia);
+  console.log("pais:", pais);
+
+  function sumar() {
+    console.log("funcion sumar");
+  }
+
+  const suma = () => {
+    console.log("funcion suma");
+  };
+
+  sumar();
+  suma();
+
+  const button = document.querySelector("#btnCargar");
+  if (button) {
+    button.addEventListener("click", cargarClientesHtml);
+  }
+  const input = document.querySelector("#input-nombre");
+  if (input) {
+    input.addEventListener("change", mostrarNombre);
+  }
+
+  const form = document.querySelector("#formulario");
+  if (form) {
+    form.addEventListener("submit", submitForm);
+  }
+
+  cargarUsuarios();
+
+  const btnAgregar = document.querySelector("#btnAgregar");
+  if (btnAgregar) {
+    btnAgregar.addEventListener("click", agregarCliente);
+  }
+
+  const tbody = document.querySelector("#tbody-section");
+  if (tbody) {
+    cargarClientesHtml();
+  }
 });
 
 // ------------------------------------------------------------------
@@ -146,48 +164,52 @@ document.addEventListener("DOMContentLoaded", function () {
  * @param {Event} event - El evento de submit del formulario.
  */
 const submitAuthForm = (event) => {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries()); 
-    data.action = form.id; 
-    
-    console.log(`Submitting form: ${form.id}`);
-    console.log("Data to send (JSON):", JSON.stringify(data));
-    
-    // LÓGICA DE REDIRECCIÓN Y ENLACE DE CORREO:
-    if(form.id === 'business-register-form') {
-        const businessEmail = data.correo;
-        console.log(`Negocio registrado con correo: ${businessEmail}. Redirigiendo a formulario de aplicación.`);
-        
-        // Simulación de respuesta de API: Se mantiene solo este alert importante.
-        alert(`¡Registro de cuenta completado! Usaremos el correo ${businessEmail} para notificarle el estado de su aplicación.`);
-        
-        // ** REDIRECCIÓN SOLICITADA **
-        window.location.href = 'business-application.html'; 
-    } else {
-         // Simulación de respuesta de API para login y registro de usuario
-         alert(`Formulario ${form.id} enviado. Procesando...`);
-    }
+  event.preventDefault();
+
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  data.action = form.id;
+
+  console.log(`Submitting form: ${form.id}`);
+  console.log("Data to send (JSON):", JSON.stringify(data));
+
+  // LÓGICA DE REDIRECCIÓN Y ENLACE DE CORREO:
+  if (form.id === "business-register-form") {
+    const businessEmail = data.correo;
+    console.log(
+      `Negocio registrado con correo: ${businessEmail}. Redirigiendo a formulario de aplicación.`
+    );
+
+    // Simulación de respuesta de API: Se mantiene solo este alert importante.
+    alert(
+      `¡Registro de cuenta completado! Usaremos el correo ${businessEmail} para notificarle el estado de su aplicación.`
+    );
+
+    // ** REDIRECCIÓN SOLICITADA **
+    window.location.href = "business-application.html";
+  } else {
+    // Simulación de respuesta de API para login y registro de usuario
+    alert(`Formulario ${form.id} enviado. Procesando...`);
+  }
 };
 
 /**
  * Función para cambiar la vista entre los formularios de login y registro.
  */
 const handleAuthTabSwitch = (event) => {
-    document.querySelectorAll('.auth-form').forEach(form => {
-        form.classList.add('hidden');
-    });
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-teal-500', 'text-teal-600');
-        button.classList.add('border-transparent', 'text-gray-500');
-    });
+  document.querySelectorAll(".auth-form").forEach((form) => {
+    form.classList.add("hidden");
+  });
+  document.querySelectorAll(".tab-button").forEach((button) => {
+    button.classList.remove("border-teal-500", "text-teal-600");
+    button.classList.add("border-transparent", "text-gray-500");
+  });
 
-    const targetFormId = event.target.dataset.form;
-    document.getElementById(targetFormId).classList.remove('hidden');
-    event.target.classList.add('border-teal-500', 'text-teal-600');
-    event.target.classList.remove('border-transparent', 'text-gray-500');
+  const targetFormId = event.target.dataset.form;
+  document.getElementById(targetFormId).classList.remove("hidden");
+  event.target.classList.add("border-teal-500", "text-teal-600");
+  event.target.classList.remove("border-transparent", "text-gray-500");
 };
 
 // ------------------------------------------------------------------
@@ -199,16 +221,16 @@ const handleAuthTabSwitch = (event) => {
  * @param {Event} event - El evento de click.
  */
 const openRecoveryModal = (event) => {
-    event.preventDefault();
-    document.getElementById('recovery-modal').classList.add('open');
+  event.preventDefault();
+  document.getElementById("recovery-modal").classList.add("open");
 };
 
 /**
  * Cierra el modal de recuperación de contraseña.
  */
 const closeRecoveryModal = () => {
-    document.getElementById('recovery-modal').classList.remove('open');
-    document.getElementById('recovery-form').reset();
+  document.getElementById("recovery-modal").classList.remove("open");
+  document.getElementById("recovery-form").reset();
 };
 
 /**
@@ -216,19 +238,20 @@ const closeRecoveryModal = () => {
  * @param {Event} event - El evento de submit del formulario.
  */
 const submitRecoveryForm = (event) => {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    const email = formData.get('correo'); 
-    
-    console.log(`Solicitud de recuperación para: ${email}`);
-    
-    alert(`Si la cuenta existe, se ha enviado un link de recuperación de contraseña al correo: ${email}.`);
-    
-    closeRecoveryModal();
-};
+  event.preventDefault();
 
+  const form = event.target;
+  const formData = new FormData(form);
+  const email = formData.get("correo");
+
+  console.log(`Solicitud de recuperación para: ${email}`);
+
+  alert(
+    `Si la cuenta existe, se ha enviado un link de recuperación de contraseña al correo: ${email}.`
+  );
+
+  closeRecoveryModal();
+};
 
 // ------------------------------------------------------------------
 // --- FUNCIÓN DE APLICACIÓN DE NEGOCIO ---
@@ -240,27 +263,31 @@ const submitRecoveryForm = (event) => {
  * @param {Event} event - El evento de submit del formulario.
  */
 const submitBusinessApplication = (event) => {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries()); 
-    
-    console.log('Submitting Business Application Form (Certificación)');
-    console.log("Data de Certificación (JSON, sin archivos):", JSON.stringify(data));
-    
-    // Obtener el correo del negocio para el mensaje de confirmación
-    const businessEmail = data.correo_negocio || 'el correo electrónico de registro';
-    
-    // Mensaje de alerta actualizado para incluir el tiempo de respuesta.
-    alert(`
+  event.preventDefault();
+
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  console.log("Submitting Business Application Form (Certificación)");
+  console.log(
+    "Data de Certificación (JSON, sin archivos):",
+    JSON.stringify(data)
+  );
+
+  // Obtener el correo del negocio para el mensaje de confirmación
+  const businessEmail =
+    data.correo_negocio || "el correo electrónico de registro";
+
+  // Mensaje de alerta actualizado para incluir el tiempo de respuesta.
+  alert(`
         ¡Solicitud Enviada!
         Su aplicación ha sido recibida y está en proceso de revisión administrativa. 
         Recibirá una respuesta sobre el estado de su certificación en los próximos 7 días hábiles 
         al correo electrónico: ${businessEmail}.
     `);
-    
-    // La solicitud va a la cola de aprobación del Administrador (RF-09.2)
+
+  // La solicitud va a la cola de aprobación del Administrador (RF-09.2)
 };
 
 // ------------------------------------------------------------------
@@ -271,73 +298,74 @@ const submitBusinessApplication = (event) => {
  * Carga los datos del perfil y determina qué vista mostrar (Usuario vs. Negocio).
  */
 const loadUserProfileData = () => {
-    const roleSelect = document.querySelector('#user_role_select');
-    const userRole = roleSelect ? roleSelect.value : 'user'; 
+  const roleSelect = document.querySelector("#user_role_select");
+  const userRole = roleSelect ? roleSelect.value : "user";
 
-    const mockUserData = {
-        nombre: 'Bryan Cerdas Salas',
-        correo: 'bryan.user@example.com',
-        telefono: '8888-9999',
-    };
-    
-    const mockBusinessData = {
-        nombre_negocio_publico: 'Ticos Tours Aventuras S.A.',
-        correo: 'contacto@ticotours.com',
-        telefono: '2233-4455',
-        provincia: 'Guanacaste', 
-        canton: 'Nicoya',
-        distrito: 'Nosara',
-        direccion_exacta: '50m sur de la playa principal, casa esquinera color azul.',
-        google_maps_link: 'https://maps.app.goo.gl/Ejemplo',
-        waze_link: 'https://waze.com/ul/Ejemplo'
-    };
+  const mockUserData = {
+    nombre: "Bryan Cerdas Salas",
+    correo: "bryan.user@example.com",
+    telefono: "8888-9999",
+  };
 
-    if (userRole === 'business') {
-        displayBusinessProfile(mockBusinessData);
-    } else {
-        displayUserProfile(mockUserData);
-    }
-}
+  const mockBusinessData = {
+    nombre_negocio_publico: "Ticos Tours Aventuras S.A.",
+    correo: "contacto@ticotours.com",
+    telefono: "2233-4455",
+    provincia: "Guanacaste",
+    canton: "Nicoya",
+    distrito: "Nosara",
+    direccion_exacta:
+      "50m sur de la playa principal, casa esquinera color azul.",
+    google_maps_link: "https://maps.app.goo.gl/Ejemplo",
+    waze_link: "https://waze.com/ul/Ejemplo",
+  };
+
+  if (userRole === "business") {
+    displayBusinessProfile(mockBusinessData);
+  } else {
+    displayUserProfile(mockUserData);
+  }
+};
 
 /**
  * Muestra la vista y rellena los campos del Perfil de Usuario Básico.
  */
 const displayUserProfile = (data) => {
-    document.querySelector('#profile-view-user').classList.remove('hidden');
-    document.querySelector('#profile-view-business')?.classList.add('hidden');
-    
-    const form = document.getElementById('user-profile-form');
-    if (form) {
-        form.elements['nombre'].value = data.nombre || '';
-        form.elements['correo'].value = data.correo || '';
-        form.elements['telefono'].value = data.telefono || '';
-    }
-    localStorage.setItem('user_current_name', data.nombre);
-}
+  document.querySelector("#profile-view-user").classList.remove("hidden");
+  document.querySelector("#profile-view-business")?.classList.add("hidden");
+
+  const form = document.getElementById("user-profile-form");
+  if (form) {
+    form.elements["nombre"].value = data.nombre || "";
+    form.elements["correo"].value = data.correo || "";
+    form.elements["telefono"].value = data.telefono || "";
+  }
+  localStorage.setItem("user_current_name", data.nombre);
+};
 
 /**
  * Muestra la vista y rellena los campos del Perfil de Negocio Certificado.
  */
 const displayBusinessProfile = (data) => {
-    document.querySelector('#profile-view-business').classList.remove('hidden');
-    document.querySelector('#profile-view-user')?.classList.add('hidden');
+  document.querySelector("#profile-view-business").classList.remove("hidden");
+  document.querySelector("#profile-view-user")?.classList.add("hidden");
 
-    const form = document.getElementById('business-profile-form');
-    if (form) {
-        form.elements['nombre_negocio_publico'].value = data.nombre_negocio_publico || '';
-        form.elements['correo'].value = data.correo || '';
-        form.elements['telefono'].value = data.telefono || '';
-        
-        form.elements['provincia'].value = data.provincia || 'San José'; 
-        form.elements['canton'].value = data.canton || '';
-        form.elements['distrito'].value = data.distrito || '';
-        form.elements['direccion_exacta'].value = data.direccion_exacta || '';
-        form.elements['google_maps_link'].value = data.google_maps_link || '';
-        form.elements['waze_link'].value = data.waze_link || '';
-    }
-    localStorage.setItem('business_current_name', data.nombre_negocio_publico);
-}
+  const form = document.getElementById("business-profile-form");
+  if (form) {
+    form.elements["nombre_negocio_publico"].value =
+      data.nombre_negocio_publico || "";
+    form.elements["correo"].value = data.correo || "";
+    form.elements["telefono"].value = data.telefono || "";
 
+    form.elements["provincia"].value = data.provincia || "San José";
+    form.elements["canton"].value = data.canton || "";
+    form.elements["distrito"].value = data.distrito || "";
+    form.elements["direccion_exacta"].value = data.direccion_exacta || "";
+    form.elements["google_maps_link"].value = data.google_maps_link || "";
+    form.elements["waze_link"].value = data.waze_link || "";
+  }
+  localStorage.setItem("business_current_name", data.nombre_negocio_publico);
+};
 
 // ------------------------------------------------------------------
 // --- FUNCIONES DE SUBMIT DE PERFILES ---
@@ -347,44 +375,51 @@ const displayBusinessProfile = (data) => {
  * Envía la actualización del Perfil de Usuario Básico.
  */
 const submitUserProfileForm = (event) => {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries()); 
-    
-    console.log('Submitting User Profile Update (User Role)');
-    console.log("Profile Data to update (JSON):", JSON.stringify(data));
+  event.preventDefault();
 
-    if (data.nombre !== localStorage.getItem('user_current_name')) {
-        alert('Cambio de Nombre Legal detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo.');
-    } else {
-        alert('Perfil de usuario actualizado con éxito (Teléfono y Correo).');
-    }
-    
-    localStorage.setItem('user_current_name', data.nombre);
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  console.log("Submitting User Profile Update (User Role)");
+  console.log("Profile Data to update (JSON):", JSON.stringify(data));
+
+  if (data.nombre !== localStorage.getItem("user_current_name")) {
+    alert(
+      "Cambio de Nombre Legal detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo."
+    );
+  } else {
+    alert("Perfil de usuario actualizado con éxito (Teléfono y Correo).");
+  }
+
+  localStorage.setItem("user_current_name", data.nombre);
 };
 
 /**
  * Envía la actualización del Perfil de Negocio Certificado.
  */
 const submitBusinessProfileForm = (event) => {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries()); 
-    
-    console.log('Submitting Business Profile Update (Business Role)');
-    console.log("Business Data to update (JSON):", JSON.stringify(data));
+  event.preventDefault();
 
-    if (data.nombre_negocio_publico !== localStorage.getItem('business_current_name')) {
-        alert('Cambio de Nombre del Negocio detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo (RF-08.2).');
-    } else {
-        alert('Perfil del negocio (Contacto/Ubicación) actualizado con éxito.');
-    }
-    
-    localStorage.setItem('business_current_name', data.nombre_negocio_publico);
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  console.log("Submitting Business Profile Update (Business Role)");
+  console.log("Business Data to update (JSON):", JSON.stringify(data));
+
+  if (
+    data.nombre_negocio_publico !==
+    localStorage.getItem("business_current_name")
+  ) {
+    alert(
+      "Cambio de Nombre del Negocio detectado. ¡Guardado! El cambio requiere **aprobación administrativa** para ser efectivo (RF-08.2)."
+    );
+  } else {
+    alert("Perfil del negocio (Contacto/Ubicación) actualizado con éxito.");
+  }
+
+  localStorage.setItem("business_current_name", data.nombre_negocio_publico);
 };
 
 // ------------------------------------------------------------------
@@ -395,21 +430,21 @@ const submitBusinessProfileForm = (event) => {
  * Inicializa la lógica para el Panel de Administración (Tab Switching y Acciones).
  */
 function initAdminPanel() {
-    const tabs = document.querySelectorAll('.admin-tab');
-    
-    if (tabs.length > 0) {
-        tabs.forEach(tab => {
-            tab.addEventListener('click', handleAdminTabSwitch);
-        });
+  const tabs = document.querySelectorAll(".admin-tab");
 
-        // Simular acciones de aprobación/rechazo
-        const table = document.getElementById('comercios-solicitudes-table');
-        if (table) {
-             table.addEventListener('click', handleAdminApprovalActions);
-        }
+  if (tabs.length > 0) {
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", handleAdminTabSwitch);
+    });
 
-        console.log('Admin Panel initialized.');
+    // Simular acciones de aprobación/rechazo
+    const table = document.getElementById("comercios-solicitudes-table");
+    if (table) {
+      table.addEventListener("click", handleAdminApprovalActions);
     }
+
+    console.log("Admin Panel initialized.");
+  }
 }
 
 /**
@@ -418,9 +453,9 @@ function initAdminPanel() {
  * directamente al HTML del admin-panel.html.
  */
 function handleAdminTabSwitch(event) {
-    const target = event.currentTarget.dataset.tab;
-    console.log(`Admin tab switched to: ${target}`);
-    // La lógica visual de la pestaña se maneja en el JS integrado en admin-panel.html
+  const target = event.currentTarget.dataset.tab;
+  console.log(`Admin tab switched to: ${target}`);
+  // La lógica visual de la pestaña se maneja en el JS integrado en admin-panel.html
 }
 
 /**
@@ -428,109 +463,127 @@ function handleAdminTabSwitch(event) {
  * @param {Event} event - El evento de click en el botón.
  */
 function handleAdminApprovalActions(event) {
-    const button = event.target;
-    if (button.tagName !== 'BUTTON') return;
+  const button = event.target;
+  if (button.tagName !== "BUTTON") return;
 
-    const row = button.closest('tr');
-    const businessName = row ? row.cells[1].textContent : 'Negocio Desconocido';
-    const action = button.textContent.trim();
+  const row = button.closest("tr");
+  const businessName = row ? row.cells[1].textContent : "Negocio Desconocido";
+  const action = button.textContent.trim();
 
-    if (confirm(`¿Está seguro de ${action} a ${businessName}?`)) {
-        if (action.includes('Aprobar')) {
-            console.log(`ADMIN: ${businessName} APROBADO.`);
-            alert(`Negocio ${businessName} APROBADO. Se enviará notificación al correo.`);
-            // Simular cambio de estado visual (RF-02.3)
-            row.remove(); 
-        } else if (action.includes('Rechazar')) {
-            const justification = prompt("Ingrese justificación para el rechazo:");
-            if (justification) {
-                console.log(`ADMIN: ${businessName} RECHAZADO. Justificación: ${justification}`);
-                alert(`Negocio ${businessName} RECHAZADO. Se enviará justificación al correo.`);
-                row.remove(); 
-            }
-        } else if (action.includes('Ver Documentos')) {
-            alert(`ADMIN: Mostrando documentos de ${businessName}.`);
-        }
+  if (confirm(`¿Está seguro de ${action} a ${businessName}?`)) {
+    if (action.includes("Aprobar")) {
+      console.log(`ADMIN: ${businessName} APROBADO.`);
+      alert(
+        `Negocio ${businessName} APROBADO. Se enviará notificación al correo.`
+      );
+      // Simular cambio de estado visual (RF-02.3)
+      row.remove();
+    } else if (action.includes("Rechazar")) {
+      const justification = prompt("Ingrese justificación para el rechazo:");
+      if (justification) {
+        console.log(
+          `ADMIN: ${businessName} RECHAZADO. Justificación: ${justification}`
+        );
+        alert(
+          `Negocio ${businessName} RECHAZADO. Se enviará justificación al correo.`
+        );
+        row.remove();
+      }
+    } else if (action.includes("Ver Documentos")) {
+      alert(`ADMIN: Mostrando documentos de ${businessName}.`);
     }
+  }
 }
-
 
 // ------------------------------------------------------------------
 // --- FUNCIONES DEL CONTEXTO ORIGINAL (index.html, reservas.html, etc.) ---
 // ------------------------------------------------------------------
 // Las siguientes funciones se mantienen del contexto original para compatibilidad.
 
-const cargarUsuarios = async () => { 
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await response.json();
-    console.log({data});
+const cargarUsuarios = async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const data = await response.json();
+  console.log({ data });
 
-    data.forEach(user => { 
-        console.log('name: ' + user.name);
-        console.log('email: ' + user.email);
-    });
-}
-
+  data.forEach((user) => {
+    console.log("name: " + user.name);
+    console.log("email: " + user.email);
+  });
+};
 
 const submitForm = (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    console.log('Form submitted');
+  console.log("Form submitted");
 
-    const form = document.querySelector('#formulario');
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
+  const form = document.querySelector("#formulario");
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  console.log(data);
 
-    const dataJson = JSON.stringify(data);
+  const dataJson = JSON.stringify(data);
 
-    console.log(dataJson);
-}
-
-
+  console.log(dataJson);
+};
 
 const mostrarNombre = (event) => {
-    console.log({event});
-    console.log('llamando a mostrar nombre');
-    const texto = document.querySelector('#texto-nombre');
-    if (texto) {
-        texto.textContent = event.target.value;
-    }
-}
-
+  console.log({ event });
+  console.log("llamando a mostrar nombre");
+  const texto = document.querySelector("#texto-nombre");
+  if (texto) {
+    texto.textContent = event.target.value;
+  }
+};
 
 const clientes = [
-    { 
-        codigo: 1, 
-        nombre: 'Cliente uno', 
-        correo: 'cliente@correo.com', 
-        telefono: '2222-4488' 
-    },
-    { codigo: 2, nombre: 'Cliente dos', correo: 'cliente@correo.com', telefono: '2222-4488' },
-    { codigo: 3, nombre: 'Cliente tres', correo: 'cliente@correo.com', telefono: '2222-4488' },
-    { codigo: 4, nombre: 'Cliente cuatro', correo: 'cliente@correo.com', telefono: '2222-4488' },
-    { codigo: 5, nombre: 'Cliente cinco', correo: 'cliente@correo.com', telefono: '2222-4488' },
-]
+  {
+    codigo: 1,
+    nombre: "Cliente uno",
+    correo: "cliente@correo.com",
+    telefono: "2222-4488",
+  },
+  {
+    codigo: 2,
+    nombre: "Cliente dos",
+    correo: "cliente@correo.com",
+    telefono: "2222-4488",
+  },
+  {
+    codigo: 3,
+    nombre: "Cliente tres",
+    correo: "cliente@correo.com",
+    telefono: "2222-4488",
+  },
+  {
+    codigo: 4,
+    nombre: "Cliente cuatro",
+    correo: "cliente@correo.com",
+    telefono: "2222-4488",
+  },
+  {
+    codigo: 5,
+    nombre: "Cliente cinco",
+    correo: "cliente@correo.com",
+    telefono: "2222-4488",
+  },
+];
 
 const cargarClientesHtml = () => {
+  const tbody = document.querySelector("#tbody-section");
+  if (!tbody) return;
 
-    const tbody = document.querySelector('#tbody-section');
-    if (!tbody) return;
+  let clientesArray = clientes;
+  const clientesJson = localStorage.getItem("clientes");
+  if (clientesJson) {
+    clientesArray = JSON.parse(clientesJson);
+  } else {
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+  }
 
-    let clientesArray = clientes;
-    const clientesJson = localStorage.getItem('clientes');
-    if (clientesJson) {
-        clientesArray = JSON.parse(clientesJson);
-    } else {
-        localStorage.setItem('clientes', JSON.stringify(clientes));
-    }
+  let filas = "";
 
-
-    let filas = '';
-
-    clientesArray.forEach(cliente => {
-
-        filas += `<tr>
+  clientesArray.forEach((cliente) => {
+    filas += `<tr>
                       <td><input type="checkbox" 
                                 class="chkCliente" 
                                 data-id="${cliente.codigo}">
@@ -540,103 +593,99 @@ const cargarClientesHtml = () => {
                       <td>${cliente.correo}</td>
                       <td>${cliente.telefono}</td>
                   </tr>`;
+  });
 
-    });
+  tbody.innerHTML = filas;
 
-    tbody.innerHTML = filas;
-
-    
-    document.querySelectorAll('.chkCliente').forEach(chk => {
-        chk.addEventListener('click', handleCheckCliente);
-    });
-}
+  document.querySelectorAll(".chkCliente").forEach((chk) => {
+    chk.addEventListener("click", handleCheckCliente);
+  });
+};
 
 const handleCheckCliente = (event) => {
-    console.log('handle check cliente');
+  console.log("handle check cliente");
 
-    const checkbox = event.target;
-    const codigoCliente = checkbox.dataset.id;
-    
-    console.log({codigoCliente});
+  const checkbox = event.target;
+  const codigoCliente = checkbox.dataset.id;
 
-    const cliente = clientes.find(c => c.codigo == codigoCliente);
+  console.log({ codigoCliente });
 
-    if(cliente) {
-        console.log(cliente);
-    } else {
-        console.log('El cliente no se encuentra');
-    }
+  const cliente = clientes.find((c) => c.codigo == codigoCliente);
 
-}
+  if (cliente) {
+    console.log(cliente);
+  } else {
+    console.log("El cliente no se encuentra");
+  }
+};
 
-const agregarCliente = () => { 
-    const clienteNuevo =     { 
-        codigo: clientes.length + 1,
-        nombre: 'Cliente Nuevo ' + (clientes.length + 1), 
-        correo: 'nuevo@correo.com', 
-        telefono: '2002-4008' 
-    }
+const agregarCliente = () => {
+  const clienteNuevo = {
+    codigo: clientes.length + 1,
+    nombre: "Cliente Nuevo " + (clientes.length + 1),
+    correo: "nuevo@correo.com",
+    telefono: "2002-4008",
+  };
 
-    clientes.push(clienteNuevo);
-    cargarClientesHtml();
+  clientes.push(clienteNuevo);
+  cargarClientesHtml();
 
-    localStorage.setItem('clientes', JSON.stringify(clientes));
-}
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+};
 
 // Sistema de reservas (basado en el contexto previo)
 function initReservas() {
-    const form = document.querySelector('#reservation-form');
-    if (form) {
-        form.addEventListener('submit', hacerReserva);
-        console.log('Form de reservas inicializado');
-    }
+  const form = document.querySelector("#reservation-form");
+  if (form) {
+    form.addEventListener("submit", hacerReserva);
+    console.log("Form de reservas inicializado");
+  }
 
-    const filtro = document.querySelector('#status-filter');
-    if (filtro) {
-        filtro.addEventListener('change', filtrarPorEstado);
-    }
+  const filtro = document.querySelector("#status-filter");
+  if (filtro) {
+    filtro.addEventListener("change", filtrarPorEstado);
+  }
 }
 
-
 function hacerReserva(e) {
-    e.preventDefault();
-    let form = e.target;
+  e.preventDefault();
+  let form = e.target;
 
-    // Lógica básica de validación y simulación de envío
-    let todoBien = true;
-    form.querySelectorAll('[required]').forEach(campo => {
-        if (!campo.value.trim()) {
-            campo.classList.add('border-red-500');
-            todoBien = false;
-        }
-    });
-
-    if (!todoBien) {
-        alert('Hay campos incompletos');
-        return;
+  // Lógica básica de validación y simulación de envío
+  let todoBien = true;
+  form.querySelectorAll("[required]").forEach((campo) => {
+    if (!campo.value.trim()) {
+      campo.classList.add("border-red-500");
+      todoBien = false;
     }
+  });
 
-    let datos = new FormData(form);
-    let reserva = Object.fromEntries(datos.entries());
-    
-    // Simulación de validación de cupón
-    // (Se asume la existencia de funciones validarCupon y aplicarDescuento si se usan cupones en make-reservation.html)
+  if (!todoBien) {
+    alert("Hay campos incompletos");
+    return;
+  }
 
-    console.log('Datos de reserva:', reserva);
-    alert('¡Reserva recibida! Te contactaremos pronto por correo para la confirmación y pago.');
-    form.reset();
+  let datos = new FormData(form);
+  let reserva = Object.fromEntries(datos.entries());
+
+  // Simulación de validación de cupón
+  // (Se asume la existencia de funciones validarCupon y aplicarDescuento si se usan cupones en make-reservation.html)
+
+  console.log("Datos de reserva:", reserva);
+  alert(
+    "¡Reserva recibida! Te contactaremos pronto por correo para la confirmación y pago."
+  );
+  form.reset();
 }
 
 function filtrarPorEstado() {
-    let filtro = document.querySelector('#status-filter');
-    if (!filtro) return;
-    let estado = filtro.value;
-    let filas = document.querySelectorAll('#reservations-table tr[data-status]');
-    
-    filas.forEach(fila => {
-        fila.style.display = 
-            estado === 'all' || fila.dataset.status === estado 
-            ? '' 
-            : 'none';
-    });
+  let filtro = document.querySelector("#status-filter");
+  if (!filtro) return;
+  let estado = filtro.value;
+  let filas = document.querySelectorAll("#reservations-table tr[data-status]");
+
+  filas.forEach((fila) => {
+    fila.style.display =
+      estado === "all" || fila.dataset.status === estado ? "" : "none";
+  });
 }

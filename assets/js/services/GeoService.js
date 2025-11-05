@@ -51,10 +51,10 @@ export class GeoService {
       }
     }
 
-    console.log(distritos);
-
     if (!distritos || distritos.length === 0) {
       throw new Error("Canton no válido");
     }
+
+    return distritos;
   }
 }
