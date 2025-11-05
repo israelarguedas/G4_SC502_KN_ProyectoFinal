@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Inicializar lógica de administración (Admin Page)
   initAdminPanel();
 
-  // Inicializar lógica de reservas (business-reservations.html)
+  // Inicializar lógica de reservas (business-reservations.php)
   initReservas(); 
 });
 
@@ -133,7 +133,7 @@ const submitAuthForm = (event) => {
     );
 
     // ** REDIRECCIÓN SOLICITADA **
-    window.location.href = "business-application.html";
+    window.location.href = "business-application.php";
   } else {
     // Simulación de respuesta de API para login y registro de usuario
     alert(`Formulario ${form.id} enviado. Procesando...`);
@@ -396,12 +396,12 @@ function initAdminPanel() {
 /**
  * Maneja el cambio de pestañas en el panel de administración.
  * Esta es una versión simplificada, ya que la lógica principal se añadió
- * directamente al HTML del admin-panel.html.
+ * directamente al HTML del admin-panel.php.
  */
 function handleAdminTabSwitch(event) {
   const target = event.currentTarget.dataset.tab;
   console.log(`Admin tab switched to: ${target}`);
-  // La lógica visual de la pestaña se maneja en el JS integrado en admin-panel.html
+  // La lógica visual de la pestaña se maneja en el JS integrado en admin-panel.php
 }
 
 /**
@@ -477,7 +477,7 @@ function hacerReserva(e) {
   let reserva = Object.fromEntries(datos.entries());
 
   // Simulación de validación de cupón
-  // (Se asume la existencia de funciones validarCupon y aplicarDescuento si se usan cupones en make-reservation.html)
+  // (Se asume la existencia de funciones validarCupon y aplicarDescuento si se usan cupones en make-reservation.php)
 
   console.log("Datos de reserva:", reserva);
   alert(

@@ -17,17 +17,17 @@
     >
       <div class="flex items-center justify-between h-14 sm:hidden">
         <a
-          href="reservations.html"
+          href="reservations.php"
           class="flex-1 text-center text-sm text-gray-700"
           >Reservar</a
         >
         <a
-          href="promotions.html"
+          href="promotions.php"
           class="flex-1 text-center text-teal-600 font-semibold"
           >Cupones</a
         >
         <a
-          href="userProfile.html"
+          href="userProfile.php"
           class="flex-1 flex items-center justify-center"
         >
           <i class="fa-solid fa-circle-user fa-xl"></i>
@@ -39,10 +39,10 @@
           <div
             class="flex-1 flex space-x-6 text-gray-700 text-sm font-semibold"
           >
-            <a href="reservations.html" class="hover:text-teal-600"
+            <a href="reservations.php" class="hover:text-teal-600"
               >Reservaciones</a
             >
-            <a href="promotions.html" class="hover:text-teal-600"
+            <a href="promotions.php" class="hover:text-teal-600"
               >Cupones B2B</a
             >
           </div>
@@ -56,7 +56,7 @@
           <ul class="flex-1 flex justify-end items-center space-x-4">
             <li>
               <a
-                href="admin-panel.html"
+                href="admin-panel.php"
                 class="text-red-500 hover:text-red-700 text-sm font-semibold"
               >
                 <i class="fa-solid fa-user-gear"></i> Admin
@@ -64,7 +64,7 @@
             </li>
             <li>
               <a
-                href="userProfile.html"
+                href="userProfile.php"
                 aria-label="User profile"
                 class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 focus:outline-none"
               >
