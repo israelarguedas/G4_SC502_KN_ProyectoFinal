@@ -12,10 +12,10 @@
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-teal-700 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-white">Admin Tico Trips</a>
+            <a href="index.php" class="text-2xl font-bold text-white">Admin Tico Trips</a>
             <div class="flex items-center space-x-4">
                 <span class="text-white text-sm hidden md:block">Bienvenido, Admin</span>
-                <a href="login-register.html" class="text-red-300 hover:text-red-100 transition">
+                <a href="login-register.php" class="text-red-300 hover:text-red-100 transition">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </a>
             </div>

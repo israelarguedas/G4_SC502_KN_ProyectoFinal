@@ -114,7 +114,7 @@
                 </button>
             </div>
             <p class="mt-4 text-center text-sm text-gray-500">
-                Será redirigido para completar el <a href="business-application.html" class="font-medium text-teal-600 hover:text-teal-500">Formulario de Aplicación</a>.
+                Será redirigido para completar el <a href="business-application.php" class="font-medium text-teal-600 hover:text-teal-500">Formulario de Aplicación</a>.
             </p>
         </form>
     </div>

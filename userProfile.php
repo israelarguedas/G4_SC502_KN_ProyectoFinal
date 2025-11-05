@@ -150,7 +150,7 @@
                     </div>
                     
                     <div class="pt-5 flex justify-between space-x-4">
-                        <a href="business-application.html" class="flex-1 py-3 px-4 text-center rounded-md shadow-sm text-base font-medium text-teal-600 border border-teal-600 hover:bg-teal-50 transition duration-150">
+                        <a href="business-application.php" class="flex-1 py-3 px-4 text-center rounded-md shadow-sm text-base font-medium text-teal-600 border border-teal-600 hover:bg-teal-50 transition duration-150">
                             Actualizar Documentación Legal
                         </a>
                         <button type="submit"

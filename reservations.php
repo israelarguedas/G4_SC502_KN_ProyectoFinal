@@ -14,9 +14,9 @@
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="text-2xl font-bold text-teal-600">Tico Trips</a>
+                <a href="index.php" class="text-2xl font-bold text-teal-600">Tico Trips</a>
                 <div class="flex space-x-4">
-                    <a href="login-register.html" class="text-gray-600 hover:text-teal-600">Iniciar Sesión</a>
+                    <a href="login-register.php" class="text-gray-600 hover:text-teal-600">Iniciar Sesión</a>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
             <div class="flex-1">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Tarjeta de Lugar 1 -->
-                    <a href="place-details.html" class="block">
+                    <a href="place-details.php" class="block">
                         <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition">
                             <div class="aspect-w-16 aspect-h-9 relative">
                                 <img src="https://via.placeholder.com/400x300" alt="Tour en Monteverde"
@@ -169,7 +169,7 @@
                     </a>
 
                     <!-- Tarjeta de Lugar 2 -->
-                    <a href="place-details.html" class="block">
+                    <a href="place-details.php" class="block">
                         <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition">
                             <div class="aspect-w-16 aspect-h-9 relative">
                                 <img src="https://via.placeholder.com/400x300" alt="Hospedaje en Manuel Antonio"
@@ -197,7 +197,7 @@
                     </a>
 
                     <!-- Tarjeta de Lugar 3 -->
-                    <a href="place-details.html" class="block">
+                    <a href="place-details.php" class="block">
                         <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition">
                             <div class="aspect-w-16 aspect-h-9 relative">
                                 <img src="https://via.placeholder.com/400x300" alt="Restaurante típico"
