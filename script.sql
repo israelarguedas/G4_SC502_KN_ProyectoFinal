@@ -60,6 +60,11 @@ CREATE TABLE `usuarios` (
 `fecha_nacimiento` DATE,
 `password_hash` VARCHAR(255) NOT NULL,
     
+-- Campos de Perfil de Usuario
+`foto_perfil` VARCHAR(500),
+`biografia` TEXT,
+`genero` ENUM('M', 'F', 'Otro') DEFAULT NULL,
+    
 -- Campos de Relación y Estatus
 `id_rol` INT UNSIGNED NOT NULL DEFAULT 2, -- Por defecto 2 (Cliente)
 `id_estatus` INT UNSIGNED NOT NULL DEFAULT 1, -- Por defecto 1 (Activo)
@@ -187,6 +192,36 @@ FOREIGN KEY (`id_negocio_fk`) REFERENCES `negocios`(`id_negocio`) ON DELETE CASC
 CHECK (`id_servicio_fk` IS NOT NULL OR `id_negocio_fk` IS NOT NULL)
 ) ENGINE=InnoDB;
 
+-- 15. Tabla de Reseñas/Comentarios (Para calificaciones de servicios)
+CREATE TABLE `resenas` (
+`id_resena` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+`id_usuario_fk` BIGINT UNSIGNED NOT NULL,
+`id_servicio_fk` BIGINT UNSIGNED NOT NULL,
+`calificacion` INT UNSIGNED NOT NULL, -- Escala 1 a 5 estrellas
+`comentario` TEXT,
+`fecha_resena` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (`id_resena`),
+FOREIGN KEY (`id_usuario_fk`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
+FOREIGN KEY (`id_servicio_fk`) REFERENCES `servicios`(`id_servicio`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 16. Tabla de Cupones B2B (Descuentos para negocios)
+CREATE TABLE `cupones_b2b` (
+`id_cupon` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+`id_negocio_fk` BIGINT UNSIGNED NOT NULL,
+`codigo_cupon` VARCHAR(50) NOT NULL UNIQUE,
+`tipo_descuento` ENUM('Porcentaje', 'MontoFijo') NOT NULL,
+`valor_descuento` DECIMAL(10, 2) NOT NULL,
+`fecha_inicio` DATE NOT NULL,
+`fecha_fin` DATE NOT NULL,
+`usos_restantes` INT UNSIGNED,
+`id_estatus` INT UNSIGNED NOT NULL DEFAULT 1, -- Por defecto 1 (Activo)
+`fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (`id_cupon`),
+FOREIGN KEY (`id_negocio_fk`) REFERENCES `negocios`(`id_negocio`) ON DELETE CASCADE,
+FOREIGN KEY (`id_estatus`) REFERENCES `estatus`(`id_estatus`)
+) ENGINE=InnoDB;
+
 -- ####################################################################
 -- #                 SCRIPT DE INSERCIÓN DE DATOS INICIALES
 -- #                           TABLA: roles
@@ -254,6 +289,51 @@ INSERT INTO `categorias` (`nombre_categoria`, `descripcion`) VALUES
 ('Tienda de Artesanías / Souvenirs', 'Comercios minoristas que venden productos hechos a mano, recuerdos, regalos locales y artículos típicos de Costa Rica.'),
 ('Transporte', 'Negocios dedicados al transporte y movilización.'),
 ('Otros Comercios', 'Cualquier otro negocio relevante y de apoyo para la experiencia turística que no se clasifica en las categorías anteriores (ej: farmacias, lavanderías, alquiler de equipo, etc.).');
+
+-- ####################################################################
+-- #                     CREACIÓN DE ÍNDICES DE OPTIMIZACIÓN
+-- ####################################################################
+
+-- Índices para tabla usuarios
+CREATE INDEX idx_usuarios_email ON usuarios(email);
+CREATE INDEX idx_usuarios_id_rol ON usuarios(id_rol);
+CREATE INDEX idx_usuarios_id_estatus ON usuarios(id_estatus);
+
+-- Índices para tabla negocios
+CREATE INDEX idx_negocios_id_usuario ON negocios(id_usuario_fk);
+CREATE INDEX idx_negocios_id_categoria ON negocios(id_categoria_fk);
+CREATE INDEX idx_negocios_id_ubicacion ON negocios(id_ubicacion_fk);
+CREATE INDEX idx_negocios_id_estatus ON negocios(id_estatus);
+
+-- Índices para tabla servicios
+CREATE INDEX idx_servicios_id_negocio ON servicios(id_negocio_fk);
+CREATE INDEX idx_servicios_id_categoria ON servicios(id_categoria_fk);
+CREATE INDEX idx_servicios_id_estatus ON servicios(id_estatus);
+
+-- Índices para tabla reservas
+CREATE INDEX idx_reservas_id_usuario ON reservas(id_usuario_fk);
+CREATE INDEX idx_reservas_id_servicio ON reservas(id_servicio_fk);
+CREATE INDEX idx_reservas_id_estatus ON reservas(id_estatus);
+CREATE INDEX idx_reservas_fecha ON reservas(fecha_reserva);
+
+-- Índices para tabla pagos
+CREATE INDEX idx_pagos_id_reserva ON pagos(id_reserva_fk);
+CREATE INDEX idx_pagos_fecha ON pagos(fecha_pago);
+
+-- Índices para tabla promociones
+CREATE INDEX idx_promociones_id_servicio ON promociones(id_servicio_fk);
+CREATE INDEX idx_promociones_codigo ON promociones(codigo_promo);
+
+-- Índices para tabla resenas
+CREATE INDEX idx_resenas_id_usuario ON resenas(id_usuario_fk);
+CREATE INDEX idx_resenas_id_servicio ON resenas(id_servicio_fk);
+CREATE INDEX idx_resenas_fecha ON resenas(fecha_resena);
+
+-- Índices para tabla cupones_b2b
+CREATE INDEX idx_cupones_id_negocio ON cupones_b2b(id_negocio_fk);
+CREATE INDEX idx_cupones_codigo ON cupones_b2b(codigo_cupon);
+CREATE INDEX idx_cupones_id_estatus ON cupones_b2b(id_estatus);
+CREATE INDEX idx_cupones_fechas ON cupones_b2b(fecha_inicio, fecha_fin);
 
 -- ####################################################################
 -- #                  SCRIPT DE INSERCIÓN CON ID EXPLÍCITO

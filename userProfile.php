@@ -17,20 +17,38 @@
             <div id="profile-view-user" class="profile-view">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Información de la Cuenta</h2>
                 
-                <form id="user-profile-form" action="#" method="POST" class="space-y-6">
+                <form id="user-profile-form" action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <div class="border-b border-gray-200 pb-5">
+                        <h3 class="text-xl font-medium text-gray-700 mb-4">Foto de Perfil</h3>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex-shrink-0">
+                                <img id="preview-foto" src="https://via.placeholder.com/100" alt="Foto de perfil" 
+                                    class="h-24 w-24 rounded-full object-cover">
+                            </div>
+                            <div class="flex-1">
+                                <label for="foto-perfil" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Cambiar Foto
+                                </label>
+                                <input type="file" id="foto-perfil" name="foto_perfil" accept="image/*"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                                <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF o WebP. Máximo 5MB.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="border-b border-gray-200 pb-5">
                         <div class="mt-4 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6">
                             
                             <div class="sm:col-span-2">
-                                <label for="user-profile-nombre" class="block text-sm font-medium text-gray-700">Nombre Legal</label>
-                                <input type="text" id="user-profile-nombre" name="nombre" required
+                                <label for="user-profile-nombre" class="block text-sm font-medium text-gray-700">Nombre Completo</label>
+                                <input type="text" id="user-profile-nombre" name="nombre_completo" required
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
                                 <p class="mt-1 text-xs text-yellow-600">Cambios en el nombre requieren aprobacion administrativa.</p>
                             </div>
 
                             <div>
                                 <label for="user-profile-correo" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-                                <input type="email" id="user-profile-correo" name="correo" required
+                                <input type="email" id="user-profile-correo" name="email" required
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
                             </div>
 
@@ -39,7 +57,30 @@
                                 <input type="tel" id="user-profile-telefono" name="telefono"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
                             </div>
-                            
+
+                            <div>
+                                <label for="user-profile-genero" class="block text-sm font-medium text-gray-700">Género</label>
+                                <select id="user-profile-genero" name="genero"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
+                                    <option value="">Prefiero no especificar</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="user-profile-fecha-nacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                                <input type="date" id="user-profile-fecha-nacimiento" name="fecha_nacimiento"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="user-profile-biografia" class="block text-sm font-medium text-gray-700">Biografía (Opcional)</label>
+                                <textarea id="user-profile-biografia" name="biografia" rows="4"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border"
+                                    placeholder="Cuéntanos un poco sobre ti..."></textarea>
+                            </div>
                         </div>
                     </div>
 

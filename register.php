@@ -33,6 +33,24 @@
                     <input type="password" id="reg-user-password" name="password" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
                 </div>
+
+                <div>
+                    <label for="reg-user-telefono" class="block text-sm font-medium text-gray-700">Teléfono (Opcional)</label>
+                    <input type="tel" id="reg-user-telefono" name="telefono"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="reg-user-genero" class="block text-sm font-medium text-gray-700">Género (Opcional)</label>
+                    <select id="reg-user-genero" name="genero"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
+                        <option value="">Prefiero no especificar</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
                 <button type="submit"
                     class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-150">
                     Registrarme

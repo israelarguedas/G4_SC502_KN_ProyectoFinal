@@ -3,6 +3,7 @@
 session_start();
 
 require_once __DIR__.'/config.php';
+require_once __DIR__.'/functions.php';
 
 
 function redirect($url) {
@@ -27,9 +28,10 @@ function current_user() {
 
 function is_admin() {
     $user = current_user();
-    // Verifica si el usuario existe y si su id_rol es 1 (admin)
+
     return $user && $user['id_rol'] == 1; 
 }
+
 
 
 
