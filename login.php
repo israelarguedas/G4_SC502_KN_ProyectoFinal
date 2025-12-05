@@ -1,0 +1,61 @@
+<?php include 'header.php' ?>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl mx-auto sm:mt-20 my-10">
+        
+        <h2 class="text-2xl font-bold mb-6 text-center text-teal-600">
+            Iniciar Sesión
+        </h2>
+        <?php if(isset($_GET['error'])): ?>
+            <div class="alert alert-danger"><?= $_GET['error'] ?></div>
+        <?php endif; ?> 
+        
+        <form id="login-form" action="authenticate.php" method="POST"> 	
+            <div class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
+                </div>
+                <div>
+                    <label for="password_hash" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input type="password" id="password_hash" name="password_hash" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
+                </div>
+                
+                <div class="flex justify-end text-sm">
+                    <a href="#" id="forgot-password-link" class="font-medium text-teal-600 hover:text-teal-500">
+                        ¿Olvidó Contraseña/Usuario?
+                    </a>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-150">
+                    Iniciar Sesión
+                </button>
+            </div>
+        </form>
+
+</body>
+</html>
+
+<?php /*
+    </div> <div id="recovery-modal" class="modal fixed inset-0 bg-gray-600 bg-opacity-75 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+            <h2 class="text-xl font-bold mb-4 text-teal-600">Recuperar Contraseña/Usuario</h2>
+            <form id="recovery-form" action="#">
+                <div class="mb-4">
+                    <label for="recovery-email" class="block text-sm font-medium text-gray-700">Ingrese su Correo Electrónico</label>
+                    <input type="email" id="recovery-email" name="correo" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
+                </div>
+                <button type="submit"
+                    class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-150">
+                    Enviar Link de Recuperación
+                </button>
+            </form>
+            <button id="close-recovery-modal" class="mt-3 w-full text-sm text-gray-500 hover:text-gray-700">Cerrar</button>
+        </div>
+    </div>
+*/  ?>

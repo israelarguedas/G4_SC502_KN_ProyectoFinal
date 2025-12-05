@@ -1,6 +1,7 @@
 <?php
-
+require_once 'init.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,11 +51,9 @@
             >
           </div>
 
-          <h3
-            class="logo-text [word-spacing:0.35rem] tracking-wide text-2xl font-bold text-teal-600"
-          >
+          <a href="index.php" class="logo-text [word-spacing:0.35rem] tracking-wide text-2xl font-bold text-teal-600">
             TicoTrips
-          </h3>
+          </a>
 
           <ul class="flex-1 flex justify-end items-center space-x-4">
             <li>
@@ -65,25 +64,32 @@
                 <i class="fa-solid fa-user-gear"></i> Admin
               </a>
             </li>
-            <li>
-              <a
-                href="userProfile.php"
-                aria-label="User profile"
-                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 focus:outline-none"
-              >
-                <i class="fa-solid fa-circle-user fa-xl"></i>
-              </a>
-            </li>
+
+            <?php if (isset($_SESSION['user_id'])): ?>
+              <li>
+                <a
+                  href="userProfile.php"
+                  aria-label="User profile"
+                  class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 focus:outline-none"
+                >
+                  <i class="fa-solid fa-circle-user fa-xl"></i>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link text-sm font-semibold text-gray-700 hover:text-teal-600" href="logout.php">Log Out</a>
+              </li>
+
+            <?php else: ?>
+              <li class="nav-item">
+                <a class="nav-link text-sm font-semibold text-gray-700 hover:text-teal-600" href="login.php">Log In</a>
+              </li>
+            <?php endif; ?>
+
           </ul>
         </div>
       </div>
-      <style>
-        /* CSS simple para el modal */
-        .modal {
-            display: none;
-        }
-        .modal.open {
-            display: flex;
-        }
-      </style>
     </nav>
+    
+    </body>
+</html>
