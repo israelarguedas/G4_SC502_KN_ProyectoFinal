@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tico Trips - Formulario de Aplicación de Negocio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<?php include 'header.php' ?>
 
 <body class="bg-gray-50 min-h-screen">
     <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -173,7 +165,4 @@
         </div>
     </div>
 
-    <script src="assets/js/main.js"></script>
-</body>
-
-</html>
+<?php include 'footer.php' ?>

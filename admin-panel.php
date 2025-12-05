@@ -1,26 +1,5 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php include 'header.php' ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tico Trips - Panel de Administración</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    </head>
-
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-teal-700 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a href="index.php" class="text-2xl font-bold text-white">Admin Tico Trips</a>
-            <div class="flex items-center space-x-4">
-                <span class="text-white text-sm hidden md:block">Bienvenido, Admin</span>
-                <a href="login-register.php" class="text-red-300 hover:text-red-100 transition">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </a>
-            </div>
-        </div>
-    </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Gestión Centralizada</h1>
@@ -115,7 +94,5 @@
             <p class="mt-4 text-gray-600">Aquí se puede agregar, editar y eliminar ofertas destacadas.</p>
         </div>
     </main>
-    <script src="assets/js/main.js"></script>
-</body>
 
-</html>
+<?php include 'footer.php' ?>
