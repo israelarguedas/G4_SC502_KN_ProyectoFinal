@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php include 'header.php' ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tico Trips - Iniciar Sesión / Registrarse</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* CSS simple para el modal */
-        .modal {
-            display: none;
-        }
-        .modal.open {
-            display: flex;
-        }
-    </style>
-</head>
+<body class="bg-gray-100 min-h-screen">
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-
-    <div class="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl">
-        <h1 class="text-3xl font-bold text-center text-teal-600 mb-8">Tico Trips</h1>
+    <div class="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl mx-auto sm:mt-20 my-10">
 
         <div class="flex border-b border-gray-200 mb-6" id="tabContainer">
             <button id="tab-login" data-form="login-form"
@@ -137,7 +119,4 @@
         </div>
     </div>
 
-    <script src="assets/js/main.js"></script>
-</body>
-
-</html>
+<?php include 'footer.php' ?>
