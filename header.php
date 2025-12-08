@@ -14,6 +14,7 @@ require_once 'init.php';
       src="https://kit.fontawesome.com/f62f5c1b62.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body class="pb-16 sm:pb-0">
     <nav
@@ -30,6 +31,14 @@ require_once 'init.php';
           class="flex-1 text-center text-teal-600 font-semibold"
           >Cupones</a
         >
+        
+        <?php if (isset($_SESSION['user_id']) && is_comercio()): ?>
+        <a
+          href="business_application.php"
+          class="flex-1 text-center text-sm text-gray-700"
+          >Registrar Negocio</a
+        >
+        <?php endif; ?>
         <a
           href="userProfile.php"
           class="flex-1 flex items-center justify-center"
@@ -49,13 +58,20 @@ require_once 'init.php';
             <a href="promotions.php" class="hover:text-teal-600"
               >Cupones B2B</a
             >
-          </div>
+            <?php if (isset($_SESSION['user_id']) && is_comercio()): ?>
+            <a href="business-application.php" class="hover:text-teal-600">
+              Mi Negocio
+            </a>
+            <?php endif; ?>
+            </div>
 
           <a href="index.php" class="logo-text [word-spacing:0.35rem] tracking-wide text-2xl font-bold text-teal-600">
             TicoTrips
           </a>
 
           <ul class="flex-1 flex justify-end items-center space-x-4">
+            
+            <?php if (isset($_SESSION['user_id']) && is_admin()): ?>
             <li>
               <a
                 href="admin-panel.php"
@@ -64,7 +80,8 @@ require_once 'init.php';
                 <i class="fa-solid fa-user-gear"></i> Admin
               </a>
             </li>
-
+            <?php endif; ?>
+            
             <?php if (isset($_SESSION['user_id'])): ?>
               <li>
                 <a

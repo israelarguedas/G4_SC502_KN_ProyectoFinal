@@ -1,4 +1,29 @@
-<?php include 'header.php' ?>
+<?php
+include 'header.php'; 
+?>
+<?php
+require_once 'init.php';
+require_once 'functions.php';
+
+if (!is_admin()) {  
+    echo "
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Acceso Denegado',
+                text: 'Rol insuficiente. Debe ser Administrador para acceder a esta página.',
+                confirmButtonText: 'Ir a Inicio'
+            }).then((result) => {
+                // Redirige después de que el usuario haga clic en el botón
+                window.location.href = 'index.php?error=" . urlencode('Acceso denegado. Rol insuficiente.') . "';
+            });
+        });
+    </script>
+    ";
+    exit; 
+}
+?>
 
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

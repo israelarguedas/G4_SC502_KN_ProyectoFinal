@@ -58,7 +58,8 @@
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
                             </div>
 
-                            <div>
+
+                            <!--<div> 
                                 <label for="user-profile-genero" class="block text-sm font-medium text-gray-700">Género</label>
                                 <select id="user-profile-genero" name="genero"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 border">
@@ -67,7 +68,7 @@
                                     <option value="F">Femenino</option>
                                     <option value="Otro">Otro</option>
                                 </select>
-                            </div>
+                            </div> //No vamos a usar genero para el perfil -->
 
                             <div>
                                 <label for="user-profile-fecha-nacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>

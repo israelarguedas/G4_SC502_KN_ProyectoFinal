@@ -23,6 +23,13 @@
                     <input type="password" id="password_hash" name="password_hash" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border">
                 </div>
+
+                <div class="flex justify-end text-sm">
+                    <a href="register.php" 
+                    class="font-medium text-teal-600 hover:text-teal-500">
+                        ¿Tienes una cuenta? Registrate
+                    </a>
+                </div>
                 
                 <div class="flex justify-end text-sm">
                     <a href="#" id="forgot-password-link" class="font-medium text-teal-600 hover:text-teal-500">

@@ -31,14 +31,14 @@ try {
         redirect('login.php?error='.urlencode('Usuario no encontrado'));
     }
 
-    if($password === $user['password_hash']) {
+    if(password_verify($password, $user['password_hash'])) { 
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id_usuario'];
         $_SESSION['email'] = $user['email'];
 
         redirect('index.php');
     } else {
-        redirect('login-redirect.php?error='.urlencode('Contraseña incorrecta'));
+        redirect('login.php?error='.urlencode('Contraseña incorrecta'));
     }
     
 } catch (Exception $e) {
@@ -46,3 +46,4 @@ try {
 }
 
 
+?>

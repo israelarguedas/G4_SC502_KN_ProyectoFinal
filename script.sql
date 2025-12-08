@@ -63,7 +63,6 @@ CREATE TABLE `usuarios` (
 -- Campos de Perfil de Usuario
 `foto_perfil` VARCHAR(500),
 `biografia` TEXT,
-`genero` ENUM('M', 'F', 'Otro') DEFAULT NULL,
     
 -- Campos de Relación y Estatus
 `id_rol` INT UNSIGNED NOT NULL DEFAULT 2, -- Por defecto 2 (Cliente)
@@ -115,7 +114,7 @@ PRIMARY KEY (`id_negocio`),
     
 -- Definiciones de Llaves Foráneas
 FOREIGN KEY (`id_usuario_fk`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
-FOREIGN KEY (`id_categoria_fk`) REFERENCES `categorias`(`id_categoria`), --⬅️ NUEVA LLAVE FORÁNEA
+FOREIGN KEY (`id_categoria_fk`) REFERENCES `categorias`(`id_categoria`), 
 FOREIGN KEY (`id_ubicacion_fk`) REFERENCES `ubicaciones`(`id_ubicacion`),
 FOREIGN KEY (`id_estatus`) REFERENCES `estatus`(`id_estatus`)
 ) ENGINE=InnoDB;
@@ -231,8 +230,9 @@ INSERT INTO `roles` (`nombre_rol`) VALUES
 ('Administrador'),
 ('Cliente'),
 ('Comercio'),
-('Restaurante'),
-('Tour');
+('Hospedaje'),
+('Tour'),
+('Comercio Registrado');
 
 -- ####################################################################
 -- #                 SCRIPT DE INSERCIÓN DE DATOS INICIALES
@@ -252,7 +252,7 @@ INSERT INTO `estatus` (`nombre`) VALUES
 
 -- ⚠️ IMPORTANTE: Este es un hash generado por PHP (password_hash) para la contraseña '123'.
 -- En un entorno de desarrollo real, esta variable DEBERÍA generarse dinámicamente.
-SET @hashed_password = '$2y$10$wN30c/X6O3f6z4nN5.Y86eZlF/8G2uG1Jq7JzS.v2/P.W7F8J0V9K'; 
+SET @hashed_password = '$2y$10$PUm.ZIeVnkZguA5BGlNeFuT0Tv63dSmFnZlf4DRtGFDDJ6x23Dp9.'; 
 
 INSERT INTO `usuarios` 
 (`nombre_completo`, `email`, `password_hash`, `telefono`, `id_rol`, `id_estatus`) 
@@ -260,8 +260,8 @@ VALUES
 -- ------------------------------------------------------------------
 -- Administradores (id_rol = 1)
 -- ------------------------------------------------------------------
-('Santi Perez', 'santi.admin@ticotrips.com', @hashed_password, '8888-0001', 1, 1),
-('Isra Arguedas', 'isra.admin@ticotrips.com', @hashed_password, '8888-0002', 1, 1),
+('Santi Perez', 'santi.admin@ticotrips.com', @hashed_password, '8888-0001', 1, 1), 
+('Isra Arguedas', 'isra.admin@ticotrips.com', @hashed_password, '8888-0002', 1, 1), 
 ('Ale Delgado', 'ale.admin@ticotrips.com', @hashed_password, '8888-0003', 1, 1),
 
 -- ------------------------------------------------------------------
