@@ -335,6 +335,9 @@ CREATE INDEX idx_cupones_codigo ON cupones_b2b(codigo_cupon);
 CREATE INDEX idx_cupones_id_estatus ON cupones_b2b(id_estatus);
 CREATE INDEX idx_cupones_fechas ON cupones_b2b(fecha_inicio, fecha_fin);
 
+-- Indice para tabla de ubicaciones
+CREATE INDEX idx_ubicaciones_geografia ON ubicaciones (provincia, canton, distrito);
+
 -- ####################################################################
 -- #                  SCRIPT DE INSERCIÓN CON ID EXPLÍCITO
 -- #                         TABLA: ubicaciones
