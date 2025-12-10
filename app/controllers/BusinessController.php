@@ -100,6 +100,27 @@ class BusinessController {
         require_once __DIR__ . '/../views/business/manage_coupons.php';
     }
 
+    public function view() {
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        
+        if ($id <= 0) {
+            $_SESSION['error'] = 'Negocio no encontrado.';
+            $this->redirect('index.php');
+            return;
+        }
+
+        $business = $this->businessModel->getById($id);
+        
+        if (!$business) {
+            $_SESSION['error'] = 'Negocio no encontrado.';
+            $this->redirect('index.php');
+            return;
+        }
+
+        $services = $this->businessModel->getServicesByBusinessId($id);
+        require_once __DIR__ . '/../views/business/view.php';
+    }
+
     private function isComercio() {
         return isset($_SESSION['id_rol']) && in_array($_SESSION['id_rol'], [3, 4, 5, 6]);
     }

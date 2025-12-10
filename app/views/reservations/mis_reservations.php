@@ -52,30 +52,29 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="p-6">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div class="flex-1">
-                                <div class="flex items-start gap-4">
-                                    <img src="https://via.placeholder.com/100" alt="Servicio" 
-                                         class="w-20 h-20 rounded-lg object-cover">
-                                    <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900">
-                                            <?= htmlspecialchars($reservation['servicio_nombre'] ?? 'Servicio') ?>
-                                        </h3>
-                                        <p class="text-sm text-gray-600">
-                                            Reserva #<?= htmlspecialchars($reservation['id_reserva']) ?>
-                                        </p>
-                                        <div class="mt-2 flex flex-wrap gap-3 text-sm text-gray-600">
-                                            <span class="flex items-center">
-                                                <i class="fas fa-calendar mr-1"></i>
-                                                <?= date('d/m/Y', strtotime($reservation['fecha_reserva'])) ?>
-                                            </span>
-                                            <span class="flex items-center">
-                                                <i class="fas fa-users mr-1"></i>
-                                                <?= htmlspecialchars($reservation['cantidad_personas']) ?> personas
-                                            </span>
-                                            <span class="flex items-center">
-                                                <i class="fas fa-money-bill mr-1"></i>
-                                                ₡<?= number_format($reservation['monto_total'], 0) ?>
-                                            </span>
-                                        </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">
+                                        <?= htmlspecialchars($reservation['nombre_servicio'] ?? 'Servicio') ?>
+                                    </h3>
+                                    <p class="text-sm text-gray-600">
+                                        <?= htmlspecialchars($reservation['nombre_negocio'] ?? '') ?>
+                                    </p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        Reserva #<?= htmlspecialchars($reservation['id_reserva']) ?>
+                                    </p>
+                                    <div class="mt-2 flex flex-wrap gap-3 text-sm text-gray-600">
+                                        <span class="flex items-center">
+                                            <i class="fas fa-calendar mr-1"></i>
+                                            <?= date('d/m/Y', strtotime($reservation['fecha_reserva'])) ?>
+                                        </span>
+                                        <span class="flex items-center">
+                                            <i class="fas fa-users mr-1"></i>
+                                            <?= htmlspecialchars($reservation['cantidad_personas']) ?> personas
+                                        </span>
+                                        <span class="flex items-center">
+                                            <i class="fas fa-money-bill mr-1"></i>
+                                            ₡<?= number_format($reservation['total_pagar'] ?? 0, 0) ?>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +93,7 @@ require_once __DIR__ . '/../layouts/header.php';
                                         3 => 'Completada',
                                         4 => 'Cancelada'
                                     ];
-                                    $statusId = $reservation['id_estado'] ?? 1;
+                                    $statusId = $reservation['id_estatus'] ?? 1;
                                 ?>
                                 <span class="px-3 py-1 text-xs font-semibold rounded-full <?= $statusColors[$statusId] ?>">
                                     <?= $statusNames[$statusId] ?>
@@ -122,7 +121,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 <i class="fas fa-calendar-times fa-4x text-gray-300 mb-4"></i>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">No tienes reservaciones</h3>
                 <p class="text-gray-600 mb-6">Comienza a explorar servicios y haz tu primera reserva</p>
-                <a href="index.php?controller=reservation&action=index" 
+                <a href="index.php?controller=home&action=search" 
                    class="inline-block px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition">
                     Explorar Servicios
                 </a>

@@ -12,77 +12,25 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
 
             <!-- Resumen del servicio seleccionado -->
+            <?php if ($service): ?>
             <div class="p-6 bg-gray-50 border-b">
                 <div class="flex items-start space-x-4">
-                    <img src="https://via.placeholder.com/150" alt="Imagen del lugar" class="w-24 h-24 rounded-lg object-cover">
                     <div>
-                        <h2 class="font-semibold text-gray-900" id="service-name">Aventura en Monteverde</h2>
-                        <p class="text-gray-500 text-sm" id="service-type">Tour / Experiencia</p>
-                        <div class="flex items-center mt-1">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="ml-2 text-sm text-gray-600">4.5 (128 reseñas)</span>
-                        </div>
-                        <p class="text-lg font-semibold text-gray-900 mt-2">₡35,000 por persona</p>
+                        <h2 class="font-semibold text-gray-900"><?php echo htmlspecialchars($service['titulo']); ?></h2>
+                        <p class="text-gray-500 text-sm"><?php echo htmlspecialchars($service['nombre_negocio']); ?></p>
+                        <?php if (!empty($service['nombre_categoria'])): ?>
+                            <p class="text-gray-500 text-xs"><?php echo htmlspecialchars($service['nombre_categoria']); ?></p>
+                        <?php endif; ?>
+                        <p class="text-lg font-semibold text-teal-600 mt-2">₡<?php echo number_format($service['precio_base'], 0); ?> por persona</p>
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Formulario de reserva -->
             <form id="reservation-form" action="index.php?controller=reservation&action=store" method="POST" class="p-6 space-y-6">
-                <input type="hidden" name="id_servicio" value="1">
+                <input type="hidden" name="id_servicio" value="<?php echo $service ? $service['id_servicio'] : ''; ?>">
                 <input type="hidden" name="id_usuario" value="<?php echo $_SESSION['user_id'] ?? ''; ?>">
-                <!-- Información de contacto -->
-                <div class="space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">Información de Contacto</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Nombre Completo</label>
-                            <input type="text" name="nombre_cliente" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-                            <input type="email" name="email_cliente" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Tipo de Identificación</label>
-                            <select required id="id-type"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                                <option value="cedula">Cédula Nacional</option>
-                                <option value="dimex">DIMEX</option>
-                                <option value="pasaporte">Pasaporte</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Número de Identificación</label>
-                            <input type="text" name="identificacion" required id="id-number"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
-                                placeholder="Ingrese su número de identificación">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <input type="tel" name="telefono_cliente" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">País de Residencia</label>
-                            <select required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                                <option value="CR">Costa Rica</option>
-                                <option value="US">Estados Unidos</option>
-                                <option value="ES">España</option>
-                                <option value="other">Otro</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Detalles de la reserva -->
                 <div class="space-y-4">
@@ -90,48 +38,26 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Fecha</label>
-                            <input type="date" name="fecha_reserva" required id="reservation-date"
+                            <input type="date" name="fecha" required id="reservation-date"
+                                min="<?php echo date('Y-m-d'); ?>"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Hora</label>
-                            <select required id="reservation-time"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                                <option value="09:00">9:00 AM</option>
-                                <option value="11:00">11:00 AM</option>
-                                <option value="13:00">1:00 PM</option>
-                                <option value="15:00">3:00 PM</option>
-                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Número de Personas</label>
-                            <select name="cantidad_personas" required id="people-count"
+                            <select name="personas" required id="people-count"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                                <option value="2">2 personas</option>
+                                <option value="1">1 persona</option>
+                                <option value="2" selected>2 personas</option>
                                 <option value="3">3 personas</option>
                                 <option value="4">4 personas</option>
                                 <option value="5">5 personas</option>
-                                <option value="6">6+ personas</option>
+                                <option value="6">6 personas</option>
+                                <option value="7">7 personas</option>
+                                <option value="8">8 personas</option>
+                                <option value="9">9 personas</option>
+                                <option value="10">10+ personas</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Idioma Preferido</label>
-                            <select required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                                <option value="es">Español</option>
-                                <option value="en">Inglés</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Requerimientos especiales -->
-                <div class="space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">Requerimientos Especiales</h3>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Notas Adicionales</label>
-                        <textarea name="comentarios" rows="3" placeholder="Alergias, necesidades especiales, preferencias..."
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"></textarea>
                     </div>
                 </div>
 
@@ -141,25 +67,16 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="space-y-2">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Precio por persona</span>
-                            <span class="font-medium" data-price="unit">₡35,000</span>
+                            <span class="font-medium" id="unit-price">₡<?php echo number_format($service['precio_base'], 0); ?></span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Personas</span>
-                            <span class="font-medium" data-price="people">2</span>
+                            <span class="text-gray-600">Número de Personas</span>
+                            <span class="font-medium" id="people-display">2</span>
                         </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Subtotal</span>
-                            <span class="font-medium" data-price="subtotal">₡70,000</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Impuestos (13% IVA)</span>
-                            <span class="font-medium" data-price="tax">₡9,100</span>
-                        </div>
-                        <div class="border-t pt-2 mt-2">
-                            <div class="flex justify-between">
-                                <span class="text-lg font-semibold">Total</span>
-                                <span class="text-lg font-bold text-teal-600" data-price="total">₡79,100</span>
-                            </div>
+                        <div class="border-t border-gray-200 pt-2 mt-2"></div>
+                        <div class="flex justify-between">
+                            <span class="text-lg font-semibold text-gray-900">Total</span>
+                            <span class="text-lg font-bold text-teal-600" id="total-price">₡<?php echo number_format($service['precio_base'] * 2, 0); ?></span>
                         </div>
                     </div>
                 </div>
@@ -192,23 +109,18 @@ require_once __DIR__ . '/../layouts/header.php';
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const peopleCount = document.getElementById('people-count');
+            const peopleDisplay = document.getElementById('people-display');
+            const totalPrice = document.getElementById('total-price');
+            const unitPrice = <?php echo $service['precio_base']; ?>;
             
-            // Actualizar precios cuando cambie el número de personas
-            peopleCount.addEventListener('change', updatePrices);
-            
-            function updatePrices() {
-                const people = parseInt(peopleCount.value);
-                const pricePerPerson = 35000;
-                const subtotal = people * pricePerPerson;
-                const tax = subtotal * 0.13;
-                const total = subtotal + tax;
+            // Update total when number of people changes
+            peopleCount.addEventListener('change', function() {
+                const people = parseInt(this.value);
+                const total = people * unitPrice;
                 
-                // Actualizar el resumen de precios en el DOM
-                document.querySelector('[data-price="people"]').textContent = people;
-                document.querySelector('[data-price="subtotal"]').textContent = `₡${subtotal.toLocaleString()}`;
-                document.querySelector('[data-price="tax"]').textContent = `₡${Math.round(tax).toLocaleString()}`;
-                document.querySelector('[data-price="total"]').textContent = `₡${Math.round(total).toLocaleString()}`;
-            }
+                peopleDisplay.textContent = people;
+                totalPrice.textContent = '₡' + Math.round(total).toLocaleString('es-CR');
+            });
         });
     </script>
     

@@ -18,7 +18,7 @@
     >
       <div class="flex items-center justify-between h-14 sm:hidden">
         <a
-          href="index.php?controller=reservation&action=index"
+          href="index.php?controller=home&action=search"
           class="flex-1 text-center text-sm text-gray-700"
           >Reservar</a
         >
@@ -51,7 +51,7 @@
           <ul class="flex space-x-6 items-center">
             <li>
               <a
-                href="index.php?controller=reservation&action=index"
+                href="index.php?controller=home&action=search"
                 class="hover:text-teal-600 transition duration-150"
                 >Reservar</a
               >

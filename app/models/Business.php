@@ -282,4 +282,41 @@ class Business {
             return [];
         }
     }
+
+    public function getById($id) {
+        try {
+            $sql = "SELECT n.*, u.provincia, u.canton, u.distrito, c.nombre_categoria,
+                           e.nombre as nombre_estatus
+                    FROM negocios n
+                    JOIN ubicaciones u ON n.id_ubicacion_fk = u.id_ubicacion
+                    LEFT JOIN categorias c ON n.id_categoria_fk = c.id_categoria
+                    LEFT JOIN estatus e ON n.id_estatus = e.id_estatus
+                    WHERE n.id_negocio = ?";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo negocio: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function getServicesByBusinessId($businessId) {
+        try {
+            $sql = "SELECT s.*, c.nombre_categoria
+                    FROM servicios s
+                    LEFT JOIN categorias c ON s.id_categoria_fk = c.id_categoria
+                    WHERE s.id_negocio_fk = ? AND s.id_estatus = 1
+                    ORDER BY s.id_servicio DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$businessId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo servicios del negocio: " . $e->getMessage());
+            return [];
+        }
+    }
 }
+

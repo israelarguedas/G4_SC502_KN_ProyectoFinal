@@ -80,7 +80,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
                     <div class="h-48 bg-gray-200">
                         <?php if (!empty($business['foto_portada'])): ?>
-                            <img src="<?= htmlspecialchars($business['foto_portada']) ?>" 
+                            <img src="app/public/images/business/<?= htmlspecialchars($business['foto_portada']) ?>" 
                                  alt="<?= htmlspecialchars($business['nombre_publico']) ?>"
                                  class="w-full h-full object-cover">
                         <?php else: ?>
@@ -118,13 +118,6 @@ require_once __DIR__ . '/../layouts/header.php';
                                class="text-teal-600 hover:text-teal-700 font-semibold text-sm">
                                 Ver más <i class="fas fa-arrow-right ml-1"></i>
                             </a>
-                            
-                            <?php if (!empty($business['telefono_contacto'])): ?>
-                                <a href="tel:<?= htmlspecialchars($business['telefono_contacto']) ?>"
-                                   class="text-gray-600 hover:text-gray-900">
-                                    <i class="fas fa-phone"></i>
-                                </a>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

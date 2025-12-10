@@ -144,7 +144,7 @@ require_once __DIR__ . '/../layouts/header.php';
       Comercios <span class="text-teal-600">Destacados</span>
     </h2>
     <a
-      href="index.php?controller=reservation&action=index"
+      href="index.php?controller=home&action=search"
       class="text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-2"
     >
       Ver todos

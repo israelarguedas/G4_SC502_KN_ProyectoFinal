@@ -9,15 +9,19 @@ class Reservation {
 
     public function create($data) {
         try {
-            $sql = "INSERT INTO reservaciones (
-                id_usuario_fk, id_servicio_fk, fecha_reservacion, 
-                hora_reservacion, cantidad_personas, nombre_contacto,
-                email_contacto, telefono_contacto, tipo_identificacion,
-                numero_identificacion, pais_residencia, id_estatus
+            // Calculate total based on service price and number of people
+            $serviceStmt = $this->pdo->prepare("SELECT precio_base FROM servicios WHERE id_servicio = ?");
+            $serviceStmt->execute([$data['service_id']]);
+            $service = $serviceStmt->fetch();
+            
+            $total = $service['precio_base'] * $data['personas'];
+            
+            $sql = "INSERT INTO reservas (
+                id_usuario_fk, id_servicio_fk, fecha_reserva, 
+                cantidad_personas, total_pagar, id_estatus
             ) VALUES (
-                :user_id, :service_id, :fecha, :hora, :personas,
-                :nombre, :email, :telefono, :tipo_id, :numero_id,
-                :pais, 1
+                :user_id, :service_id, :fecha, 
+                :personas, :total, 1
             )";
 
             $stmt = $this->pdo->prepare($sql);
@@ -25,14 +29,8 @@ class Reservation {
                 'user_id' => $data['user_id'],
                 'service_id' => $data['service_id'],
                 'fecha' => $data['fecha'],
-                'hora' => $data['hora'],
                 'personas' => $data['personas'],
-                'nombre' => $data['nombre'],
-                'email' => $data['email'],
-                'telefono' => $data['telefono'],
-                'tipo_id' => $data['tipo_identificacion'],
-                'numero_id' => $data['numero_identificacion'],
-                'pais' => $data['pais']
+                'total' => $total
             ]);
 
             if ($result) {
@@ -50,17 +48,20 @@ class Reservation {
     public function getByUserId($userId) {
         try {
             $stmt = $this->pdo->prepare("
-                SELECT r.*, s.nombre_servicio, n.nombre_publico as nombre_negocio,
-                       e.nombre_estatus
-                FROM reservaciones r
+                SELECT r.*, s.titulo as nombre_servicio, n.nombre_publico as nombre_negocio,
+                       e.nombre as nombre_estatus, c.nombre_categoria,
+                       u.provincia, u.canton, u.distrito
+                FROM reservas r
                 JOIN servicios s ON r.id_servicio_fk = s.id_servicio
                 JOIN negocios n ON s.id_negocio_fk = n.id_negocio
                 JOIN estatus e ON r.id_estatus = e.id_estatus
+                JOIN categorias c ON s.id_categoria_fk = c.id_categoria
+                JOIN ubicaciones u ON n.id_ubicacion_fk = u.id_ubicacion
                 WHERE r.id_usuario_fk = ?
-                ORDER BY r.fecha_reservacion DESC
+                ORDER BY r.fecha_reserva DESC, r.fecha_creacion DESC
             ");
             $stmt->execute([$userId]);
-            return $stmt->fetchAll();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             Logger::error("Error obteniendo reservaciones: " . $e->getMessage());
             return [];

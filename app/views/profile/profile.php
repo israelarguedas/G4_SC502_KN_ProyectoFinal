@@ -97,7 +97,9 @@ require_once __DIR__ . '/../layouts/header.php';
                             </label>
                             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" 
                                    value="<?= htmlspecialchars($user['fecha_Nacimiento'] ?? '') ?>"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                                   disabled
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed">
+                            <p class="text-xs text-gray-500 mt-1">La fecha de nacimiento no puede ser modificada</p>
                         </div>
                     </div>
 

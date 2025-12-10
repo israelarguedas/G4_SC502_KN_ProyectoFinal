@@ -28,7 +28,3 @@ tmp/
 temp/
 *.tmp
 *.cache
-
-# User uploaded files (optional - comment out if you want to track these)
-# app/public/images/profiles/
-# app/public/uploads/

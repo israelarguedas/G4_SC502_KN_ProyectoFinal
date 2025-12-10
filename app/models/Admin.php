@@ -115,8 +115,8 @@ class Admin {
                     COUNT(*) as total_reservaciones,
                     SUM(CASE WHEN id_estatus = 1 THEN 1 ELSE 0 END) as pendientes,
                     SUM(CASE WHEN id_estatus = 2 THEN 1 ELSE 0 END) as confirmadas,
-                    SUM(CASE WHEN YEAR(fecha_reservacion) = YEAR(CURDATE()) THEN 1 ELSE 0 END) as anuales
-                FROM reservaciones
+                    SUM(CASE WHEN YEAR(fecha_reserva) = YEAR(CURDATE()) THEN 1 ELSE 0 END) as anuales
+                FROM reservas
             ");
             return $stmt->fetch();
         } catch (PDOException $e) {
@@ -129,7 +129,7 @@ class Admin {
         try {
             $stmt = $this->pdo->prepare("
                 SELECT r.*, u.nombre_completo, n.nombre_publico as negocio
-                FROM reservaciones r
+                FROM reservas r
                 JOIN usuarios u ON r.id_usuario_fk = u.id_usuario
                 JOIN servicios s ON r.id_servicio_fk = s.id_servicio
                 JOIN negocios n ON s.id_negocio_fk = n.id_negocio
@@ -151,7 +151,7 @@ class Admin {
                 SELECT 
                     (SELECT COUNT(*) FROM usuarios WHERE id_estatus = 1) as total_usuarios,
                     (SELECT COUNT(*) FROM negocios WHERE id_estatus = 1) as negocios_activos,
-                    (SELECT COUNT(*) FROM reservaciones) as total_reservaciones,
+                    (SELECT COUNT(*) FROM reservas) as total_reservaciones,
                     (SELECT COUNT(*) FROM cupones_b2b WHERE id_estatus = 1) as cupones_activos
             ");
             return $stmt->fetch();
@@ -188,7 +188,7 @@ class Admin {
                 SELECT n.nombre_publico, COUNT(r.id_reservacion) as total_reservas
                 FROM negocios n
                 JOIN servicios s ON n.id_negocio = s.id_negocio_fk
-                LEFT JOIN reservaciones r ON s.id_servicio = r.id_servicio_fk
+                LEFT JOIN reservas r ON s.id_servicio = r.id_servicio_fk
                 GROUP BY n.id_negocio
                 ORDER BY total_reservas DESC
                 LIMIT ?

@@ -156,9 +156,16 @@ CREATE TABLE `reservas` (
 `id_usuario_fk` BIGINT UNSIGNED NOT NULL,
 `id_servicio_fk` BIGINT UNSIGNED NOT NULL,
 `fecha_reserva` DATE NOT NULL,
+`hora_reserva` TIME,
 `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 `cantidad_personas` INT UNSIGNED NOT NULL,
-`total_pagar` DECIMAL(10, 2) NOT NULL,
+`total_pagar` DECIMAL(10, 2),
+`nombre_contacto` VARCHAR(255),
+`email_contacto` VARCHAR(255),
+`telefono_contacto` VARCHAR(20),
+`tipo_identificacion` VARCHAR(50),
+`numero_identificacion` VARCHAR(50),
+`pais_residencia` VARCHAR(100),
 `id_estatus` INT UNSIGNED NOT NULL, -- Estatus: 'Pendiente Pago', 'Confirmada', 'Cancelada'
 PRIMARY KEY (`id_reserva`),
 FOREIGN KEY (`id_usuario_fk`) REFERENCES `usuarios`(`id_usuario`),
@@ -928,10 +935,6 @@ INSERT INTO `negocios` (
  NULL, NULL, 'placeholder.jpg',
  1, 'San José, Centro, Avenida Central', 'https://maps.app.goo.gl/sanjose', 'https://waze.com/ul/sanjose', 1),
 
--- ####################################################################
--- #         NEGOCIOS ADICIONALES (1 por provincia faltante)
--- ####################################################################
-
 -- GUANACASTE - Restaurante Liberia
 (7, 'Restaurante El Sabanero S.A.', 'Restaurante El Sabanero', 3,
  'Comida típica guanacasteca con gallos, sopas y carnes a la parrilla en ambiente familiar.', '2666-0009', 'contacto@elsabanero.com',
@@ -945,3 +948,62 @@ INSERT INTO `negocios` (
  'Jurídica', '3110123456', 'Carlos Duarte', 'LM-010',
  NULL, NULL, 'puerto-viejo.jpg',
  480, 'Cahuita, frente a la entrada del parque nacional', 'https://maps.app.goo.gl/cahuita', 'https://waze.com/ul/cahuita', 1);
+
+-- ####################################################################
+-- #                  SERVICIOS PARA CADA NEGOCIO
+-- ####################################################################
+-- Servicios para cada uno de los 10 negocios con precios y descripciones
+-- Nota: id_estatus = 1 (Activo) para servicios disponibles
+
+INSERT INTO `servicios` (
+  `id_negocio_fk`, `id_categoria_fk`, `titulo`, `descripcion_corta`, 
+  `precio_base`, `duracion_dias`, `id_estatus`
+) VALUES
+-- Servicios para Hotel Arenal Paradise (id_negocio=1)
+(1, 1, 'Habitación Doble Standard', 'Habitación cómoda con vista al jardín, baño privado, WiFi y desayuno incluido.', 85.00, 1, 1),
+(1, 1, 'Habitación Suite con Vista al Volcán', 'Suite de lujo con balcón privado, vista panorámica al Volcán Arenal, jacuzzi y desayuno gourmet.', 150.00, 1, 1),
+(1, 1, 'Cabaña Familiar', 'Cabaña espaciosa para hasta 4 personas con cocina equipada y terraza con hamacas.', 120.00, 1, 1),
+
+-- Servicios para Tour Volcán Irazú (id_negocio=2)
+(2, 2, 'Tour Volcán Irazú Medio Día', 'Excursión guiada al cráter principal del volcán, incluye transporte y desayuno típico. Duración: 5 horas.', 45.00, NULL, 1),
+(2, 2, 'Tour Irazú + Cartago Colonial', 'Visita al volcán y recorrido por la Basílica de los Ángeles y centro de Cartago. Duración: 8 horas.', 65.00, NULL, 1),
+
+-- Servicios para Aventuras en Kayak (id_negocio=3)
+(3, 2, 'Tour en Kayak por Manglares', 'Recorrido guiado de 2 horas por manglares con observación de fauna silvestre.', 35.00, NULL, 1),
+(3, 2, 'Kayak al Atardecer', 'Experiencia romántica en kayak durante la puesta del sol con snacks incluidos. Duración: 1.5 horas.', 40.00, NULL, 1),
+(3, 2, 'Tour Kayak + Snorkel', 'Aventura completa con kayak y snorkel en arrecifes cercanos, equipo incluido. Duración: 4 horas.', 55.00, NULL, 1),
+
+-- Servicios para Hotel Monteverde Cloud Forest (id_negocio=4)
+(4, 1, 'Habitación Ecológica Doble', 'Habitación rústica con materiales sostenibles, vista al bosque y desayuno orgánico.', 70.00, 1, 1),
+(4, 1, 'Suite Canopy con Terraza', 'Suite premium con terraza privada para observación de aves y fauna nocturna.', 110.00, 1, 1),
+(4, 2, 'Tour Nocturno Bosque Nuboso', 'Caminata nocturna guiada por senderos privados para observar fauna y flora única. Duración: 2 horas.', 30.00, NULL, 1),
+
+-- Servicios para Souvenirs Puerto Viejo (id_negocio=5)
+(5, 4, 'Artesanías de Madera Tallada', 'Productos hechos a mano por artesanos locales: figuras, joyeros, decoraciones.', 25.00, NULL, 1),
+(5, 4, 'Joyería Caribeña', 'Collares, pulseras y aretes con diseños inspirados en la cultura afrocaribeña.', 15.00, NULL, 1),
+(5, 4, 'Textiles y Ropa Batik', 'Camisetas, vestidos y bolsos con técnica batik tradicional en colores vibrantes.', 20.00, NULL, 1),
+
+-- Servicios para Tour Río Celeste (id_negocio=6)
+(6, 2, 'Tour Río Celeste y Cascada', 'Caminata de 6km por sendero del parque hasta la cascada de aguas turquesas. Duración: 4 horas.', 50.00, NULL, 1),
+(6, 2, 'Tour Río Celeste + Aguas Termales', 'Visita al río Celeste y relajación en aguas termales naturales cercanas. Duración: 6 horas.', 70.00, NULL, 1),
+(6, 2, 'Tour Fotográfico Río Celeste', 'Recorrido especializado con guía fotógrafo para capturar los mejores ángulos. Duración: 5 horas.', 85.00, NULL, 1),
+
+-- Servicios para Sabores de Santa Teresa (id_negocio=7)
+(7, 3, 'Almuerzo Frente al Mar', 'Menú del día con ceviches, pescado fresco y opciones vegetarianas con vista al océano. Duración: 1.5 horas.', 18.00, NULL, 1),
+(7, 3, 'Cena Romántica Sunset', 'Cena de 3 tiempos con mariscos premium y vino durante la puesta de sol. Duración: 2 horas.', 45.00, NULL, 1),
+(7, 3, 'Clase de Cocina Costarricense', 'Aprende a preparar platos típicos con chef local, incluye ingredientes y degustación. Duración: 3 horas.', 60.00, NULL, 1),
+
+-- Servicios para Servicios Turísticos CR (id_negocio=8)
+(8, 6, 'Alquiler de Equipo de Playa', 'Tablas de surf, snorkel, sombrillas y sillas por día completo.', 25.00, 1, 1),
+(8, 6, 'City Tour San José', 'Recorrido guiado por museos, mercados y sitios históricos de la capital. Duración: 4 horas.', 35.00, NULL, 1),
+(8, 6, 'Información y Mapas Turísticos', 'Servicio de información turística con mapas, guías y recomendaciones personalizadas.', 5.00, NULL, 1),
+
+-- Servicios para Restaurante El Sabanero (id_negocio=9)
+(9, 3, 'Almuerzo Típico Guanacasteco', 'Plato fuerte con arroz, frijoles, carne asada, ensalada y tortillas palmeadas. Duración: 1 hora.', 12.00, NULL, 1),
+(9, 3, 'Sopa de Mondongo Especial', 'Tradicional sopa guanacasteca con verduras y tortillas, ideal para días frescos. Duración: 45 minutos.', 8.00, NULL, 1),
+(9, 3, 'Cena BBQ Familiar', 'Parrillada para 4 personas con carnes, chorizos, gallos y acompañamientos. Duración: 1.5 horas.', 50.00, NULL, 1),
+
+-- Servicios para Aventuras Cahuita (id_negocio=10)
+(10, 2, 'Snorkel en Arrecife de Coral', 'Tour de snorkel en el arrecife con equipo incluido y guía bilingüe. Duración: 2.5 horas.', 40.00, NULL, 1),
+(10, 2, 'Caminata Parque Nacional Cahuita', 'Recorrido por senderos costeros con observación de monos, perezosos y aves. Duración: 3 horas.', 25.00, NULL, 1),
+(10, 2, 'Tour Combinado Snorkel + Caminata', 'Experiencia completa con snorkel en la mañana y caminata por la tarde. Duración: 6 horas.', 55.00, NULL, 1);
