@@ -1,0 +1,33 @@
+[2025-12-10 07:58:22] [INFO] Nuevo usuario registrado: santadsibq1212@gmail.com
+[2025-12-10 07:58:38] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 07:58:38] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 07:58:43] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 07:58:43] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 07:59:16] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 07:59:16] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:06] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:06] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:08] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:08] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:11] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:11] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:12] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:18] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:00:18] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:02:59] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:02:59] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:10:28] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:10:28] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:13:11] [ERROR] Error obteniendo usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:13:11] [ERROR] Error en routing: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ruta_foto_perfil' in 'field list'
+[2025-12-10 08:13:47] [ERROR] Error obteniendo reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 08:17:12] [ERROR] Error obteniendo reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 08:17:18] [ERROR] Error obteniendo estadísticas de reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 08:17:18] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
