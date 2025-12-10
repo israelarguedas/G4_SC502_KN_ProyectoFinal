@@ -1007,3 +1007,14 @@ INSERT INTO `servicios` (
 (10, 2, 'Snorkel en Arrecife de Coral', 'Tour de snorkel en el arrecife con equipo incluido y guía bilingüe. Duración: 2.5 horas.', 40.00, NULL, 1),
 (10, 2, 'Caminata Parque Nacional Cahuita', 'Recorrido por senderos costeros con observación de monos, perezosos y aves. Duración: 3 horas.', 25.00, NULL, 1),
 (10, 2, 'Tour Combinado Snorkel + Caminata', 'Experiencia completa con snorkel en la mañana y caminata por la tarde. Duración: 6 horas.', 55.00, NULL, 1);
+
+-- ####################################################################
+-- #                 CUPONES DE PRUEBA PARA DEMOSTRACIÓN
+-- ####################################################################
+
+INSERT INTO `cupones_b2b` (`id_negocio_fk`, `codigo_cupon`, `tipo_descuento`, `valor_descuento`, `fecha_inicio`, `fecha_fin`, `usos_restantes`, `id_estatus`) VALUES
+(1, 'BIENVENIDA2024', 'Porcentaje', 15, '2024-01-01', '2025-12-31', NULL, 1),
+(1, 'ARENAL2024', 'Porcentaje', 20, '2024-12-01', '2025-01-31', NULL, 1),
+(2, 'PLAYA15', 'Porcentaje', 15, '2024-12-01', '2025-03-31', NULL, 1),
+(3, 'AVENTURA25', 'MontoFijo', 5000, '2024-12-10', '2025-02-28', NULL, 1),
+(4, 'HOSPEDAJE10', 'Porcentaje', 10, '2024-12-01', '2025-06-30', NULL, 1);
