@@ -36,40 +36,54 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
       </div>
     </div>
-    <div>
-      <div class="flex items-center gap-4 search-home-page">
-        <select
-          name="provincias"
-          id="provinciasSelect"
-          class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        ></select>
-        <select
-          name="cantones"
-          id="cantonesSelect"
-          class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        ></select>
-        <select
-          name="distritos"
-          id="distritosSelect"
-          class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        ></select>
+    
+    <form action="index.php" method="GET">
+      <input type="hidden" name="controller" value="home">
+      <input type="hidden" name="action" value="search">
+      
+      <div>
+        <div class="flex items-center gap-4 search-home-page">
+          <select
+            name="provincia"
+            id="provinciasSelect"
+            class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Todas las provincias</option>
+          </select>
+          <select
+            name="canton"
+            id="cantonesSelect"
+            class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Todos los cantones</option>
+          </select>
+          <select
+            name="distrito"
+            id="distritosSelect"
+            class="shadow-md border border-gray-300 rounded-lg p-3 w-4/12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Todos los distritos</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div class="mt-4 flex flex-col items-center w-full">
-      <button
-        class="shadow-md border border-gray-300 rounded-lg p-3 w-full bg-white hover:bg-gray-50 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        aria-label="Usar ubicación actual"
-      >
-        <i class="fa-solid fa-location-crosshairs"></i>
-        <span>Usar mi ubicación</span>
-      </button>
-      <button
-        class="w-full mt-4 bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition shadow-md"
-      >
-        <i class="fa-solid fa-magnifying-glass mr-2"></i>
-        Buscar
-      </button>
-    </div>
+      <div class="mt-4 flex flex-col items-center w-full">
+        <button
+          type="button"
+          class="shadow-md border border-gray-300 rounded-lg p-3 w-full bg-white hover:bg-gray-50 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Usar ubicación actual"
+        >
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <span>Usar mi ubicación</span>
+        </button>
+        <button
+          type="submit"
+          class="w-full mt-4 bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition shadow-md"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          Buscar
+        </button>
+      </div>
+    </form>
   </section>
   <section class="hidden sm:block overflow-hidden">
     <div class="grid grid-cols-2 gap-6 items-center">
@@ -193,293 +207,76 @@ require_once __DIR__ . '/../layouts/header.php';
       id="comerciosCarousel"
       class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
     >
-      <!-- Card 1: Hotel -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="hotel"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/monteverde.jpg"
-            alt="Hotel Vista Monteverde"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-hotel"></i> Hotel
-          </span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">
-            Hotel Vista Monteverde
-          </h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Monteverde, Puntarenas
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-            </span>
-            <span class="text-gray-500 text-sm ml-2">(128)</span>
-          </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-lg">
-              ₡45,000
-              <span class="text-sm text-gray-500 font-normal">/noche</span>
-            </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
+      <?php if (!empty($featuredBusinesses)): ?>
+        <?php foreach ($featuredBusinesses as $business): 
+          // Determinar el ícono y color según la categoría
+          $categoryInfo = [
+            'Hospedaje' => ['icon' => 'fa-hotel', 'color' => 'blue-500', 'filter' => 'hotel'],
+            'Tour / Experiencia' => ['icon' => 'fa-volcano', 'color' => 'green-500', 'filter' => 'tour'],
+            'Restaurante / Gastronomía' => ['icon' => 'fa-utensils', 'color' => 'orange-500', 'filter' => 'restaurante'],
+            'Tienda de Artesanías / Souvenirs' => ['icon' => 'fa-store', 'color' => 'purple-500', 'filter' => 'tienda'],
+            'Transporte' => ['icon' => 'fa-car', 'color' => 'indigo-500', 'filter' => 'transporte'],
+            'Otros Comercios' => ['icon' => 'fa-ellipsis', 'color' => 'gray-600', 'filter' => 'otros']
+          ];
+          
+          $category = $business['nombre_categoria'] ?? 'Otros Comercios';
+          $icon = $categoryInfo[$category]['icon'] ?? 'fa-ellipsis';
+          $color = $categoryInfo[$category]['color'] ?? 'gray-600';
+          $filterCategory = $categoryInfo[$category]['filter'] ?? 'otros';
+          
+          // Ruta de la imagen
+          $imagePath = !empty($business['foto_portada']) 
+            ? 'app/public/images/business/' . $business['foto_portada'] 
+            : 'app/public/images/business/placeholder.jpg';
+        ?>
+        <div
+          class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
+          data-category="<?= $filterCategory ?>"
+        >
+          <div class="h-48 bg-gray-200 overflow-hidden relative">
+            <img
+              src="<?= htmlspecialchars($imagePath) ?>"
+              alt="<?= htmlspecialchars($business['nombre_publico']) ?>"
+              class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+              onerror="this.src='app/public/images/placeholder.jpg'"
+            />
+            <span
+              class="absolute top-3 left-3 bg-<?= $color ?> text-white text-xs font-semibold px-3 py-1 rounded-full"
             >
-              Ver más
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Tour -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="tour"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/rio-celeste.jpg"
-            alt="Tour Río Celeste"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-volcano"></i> Tour
-          </span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">Tour Río Celeste</h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Guatuso, Alajuela
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid <?= $icon ?>"></i> <?= htmlspecialchars($category) ?>
             </span>
-            <span class="text-gray-500 text-sm ml-2">(245)</span>
           </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-lg">
-              ₡35,000
-              <span class="text-sm text-gray-500 font-normal">/persona</span>
+          <div class="p-4">
+            <h3 class="font-bold text-lg text-gray-800">
+              <?= htmlspecialchars($business['nombre_publico']) ?>
+            </h3>
+            <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-location-dot text-teal-500"></i>
+              <?= htmlspecialchars($business['distrito']) ?>, <?= htmlspecialchars($business['provincia']) ?>
             </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
-            >
-              Ver más
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Restaurante -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="restaurante"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/santa-tere.jpg"
-            alt="Soda La Tica"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-utensils"></i> Restaurante
-          </span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">Soda La Tica</h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Santa Teresa, Puntarenas
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </span>
-            <span class="text-gray-500 text-sm ml-2">(89)</span>
-          </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-lg">
-              ₡₡
-              <span class="text-sm text-gray-500 font-normal">Precio medio</span>
+            <p class="text-gray-700 text-sm mt-2 line-clamp-2">
+              <?= htmlspecialchars($business['descripcion_corta'] ?? 'Sin descripción') ?>
             </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
-            >
-              Ver más
-            </button>
+            <div class="flex items-center justify-between mt-4">
+              <p class="text-teal-600 font-bold text-sm flex items-center gap-2">
+                <i class="fa-solid fa-phone"></i> 
+                <?= htmlspecialchars($business['telefono_contacto'] ?? 'N/A') ?>
+              </p>
+              <a
+                href="index.php?controller=business&action=view&id=<?= $business['id_negocio'] ?>"
+                class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
+              >
+                Ver más
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Card 4: Tienda -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="tienda"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/puerto-viejo.jpg"
-            alt="Souvenirs Caribeños"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-store"></i> Tienda
-          </span>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="w-full text-center py-8">
+          <p class="text-gray-500">No hay negocios destacados disponibles en este momento.</p>
         </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">
-            Souvenirs Caribeños
-          </h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Puerto Viejo, Limón
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-            </span>
-            <span class="text-gray-500 text-sm ml-2">(56)</span>
-          </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-sm flex items-center gap-2">
-              <i class="fa-solid fa-clock"></i> Abierto ahora
-            </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
-            >
-              Ver más
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 5: Hotel -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="hotel"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/kayak.jpg"
-            alt="Cabinas Playa Hermosa"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-indigo-500 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-bed"></i> Estadía
-          </span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">
-            Cabinas Playa Hermosa
-          </h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Jacó, Puntarenas
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-            </span>
-            <span class="text-gray-500 text-sm ml-2">(92)</span>
-          </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-lg">
-              ₡25,000
-              <span class="text-sm text-gray-500 font-normal">/noche</span>
-            </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
-            >
-              Ver más
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 6: Otro -->
-      <div
-        class="commerce-card min-w-[280px] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition snap-start"
-        data-category="otros"
-      >
-        <div class="h-48 bg-gray-200 overflow-hidden relative">
-          <img
-            src="app/public/images/irazu.jpg"
-            alt="Lavandería Express"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          />
-          <span
-            class="absolute top-3 left-3 bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-spray-can-sparkles"></i> Limpieza
-          </span>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-lg text-gray-800">
-            Lavandería Express
-          </h3>
-          <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-location-dot text-teal-500"></i>
-            Cartago, Cartago
-          </p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-400">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </span>
-            <span class="text-gray-500 text-sm ml-2">(142)</span>
-          </div>
-          <div class="flex items-center justify-between mt-4">
-            <p class="text-teal-600 font-bold text-sm flex items-center gap-2">
-              <i class="fa-solid fa-check-circle"></i> Servicio rápido
-            </p>
-            <button
-              class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition text-sm font-semibold"
-            >
-              Ver más
-            </button>
-          </div>
-        </div>
-      </div>
+      <?php endif; ?>
     </div>
 
     <!-- Botón siguiente -->

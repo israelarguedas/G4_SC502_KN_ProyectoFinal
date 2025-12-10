@@ -99,6 +99,7 @@ CREATE TABLE `negocios` (
 -- Rutas de Archivos
 `ruta_cedula_frente` VARCHAR(255),
 `ruta_cedula_reverso` VARCHAR(255),
+`foto_portada` VARCHAR(255),
     
 -- 3. Ubicación
 `id_ubicacion_fk` INT UNSIGNED NOT NULL,
@@ -859,3 +860,88 @@ INSERT INTO ubicaciones (id_ubicacion, provincia, canton, distrito) VALUES
 (487, 'Limón', 'Guácimo', 'Pocora'),
 (488, 'Limón', 'Guácimo', 'Río Jiménez'),
 (489, 'Limón', 'Guácimo', 'Duacarí');
+
+-- ####################################################################
+-- #                  DATOS DE NEGOCIOS PARA DEMO (CARRUSEL)
+-- ####################################################################
+-- Nota: id_estatus = 1 (Activo) para negocios aprobados y visibles.
+INSERT INTO `negocios` (
+  `id_usuario_fk`, `nombre_legal`, `nombre_publico`, `id_categoria_fk`,
+  `descripcion_corta`, `telefono_contacto`, `correo_contacto`,
+  `tipo_cedula`, `cedula_hacienda`, `nombre_representante`, `no_licencia_municipal`,
+  `ruta_cedula_frente`, `ruta_cedula_reverso`, `foto_portada`,
+  `id_ubicacion_fk`, `direccion_exacta`, `link_google_maps`, `link_waze`, `id_estatus`
+) VALUES
+-- Hotel Arenal
+(6, 'Hotel Arenal Paradise S.A.', 'Hotel Arenal Paradise', 1,
+ 'Hospedaje de lujo con vistas espectaculares al Volcán Arenal y aguas termales naturales.', '2479-0001', 'reservas@arenalparadise.com',
+ 'Jurídica', '3101123456', 'Pedro Mora', 'LM-001',
+ NULL, NULL, 'arenal.jpg',
+ 200, 'La Fortuna, 2km del centro hacia el volcán', 'https://maps.app.goo.gl/arenal', 'https://waze.com/ul/arenal', 1),
+
+-- Tour Volcán Irazú
+(8, 'Tours Irazú Adventure', 'Tour Volcán Irazú', 2,
+ 'Excursión guiada al cráter del volcán más alto de Costa Rica con desayuno típico incluido.', '2530-0002', 'info@irazutours.com',
+ 'Jurídica', '3102123456', 'Carlos Duarte', 'LM-002',
+ NULL, NULL, 'irazu.jpg',
+ 238, 'Parque Nacional Volcán Irazú, entrada principal', 'https://maps.app.goo.gl/irazu', 'https://waze.com/ul/irazu', 1),
+
+-- Kayak Adventures
+(8, 'Kayak Adventures CR', 'Aventuras en Kayak', 2,
+ 'Tours en kayak por manglares y costas del Pacífico con equipo profesional incluido.', '2643-0003', 'aventuras@kayakcr.com',
+ 'Jurídica', '3103123456', 'Carlos Duarte', 'LM-003',
+ NULL, NULL, 'kayak.jpg',
+ 455, 'Playa Jacó, frente al muelle principal', 'https://maps.app.goo.gl/jaco', 'https://waze.com/ul/jaco', 1),
+
+-- Hotel Monteverde
+(6, 'Hotel Vista Monteverde S.A.', 'Hotel Monteverde Cloud Forest', 1,
+ 'Hotel boutique en el bosque nuboso con senderos privados y observación de aves.', '2645-0004', 'contacto@monteverdecf.com',
+ 'Jurídica', '3104123456', 'Pedro Mora', 'LM-004',
+ NULL, NULL, 'monteverde.jpg',
+ 458, 'Monteverde, 500m del centro hacia la reserva', 'https://maps.app.goo.gl/monteverde', 'https://waze.com/ul/monteverde', 1),
+
+-- Souvenirs Puerto Viejo
+(6, 'Artesanías del Caribe S.A.', 'Souvenirs Puerto Viejo', 4,
+ 'Tienda de artesanías caribeñas, productos locales y recuerdos hechos a mano por artistas de la zona.', '2750-0005', 'ventas@souvenirspv.com',
+ 'Jurídica', '3105123456', 'Pedro Mora', 'LM-005',
+ NULL, NULL, 'puerto-viejo.jpg',
+ 331, 'Puerto Viejo de Sarapiquí, centro del pueblo', 'https://maps.app.goo.gl/puertoviejo', 'https://waze.com/ul/puertoviejo', 1),
+
+-- Tour Río Celeste
+(8, 'Río Celeste Tours & Adventures', 'Tour Río Celeste', 2,
+ 'Caminata guiada por el sendero del Río Celeste y la cascada de aguas turquesas.', '2466-0006', 'info@riocelestetours.com',
+ 'Jurídica', '3106123456', 'Carlos Duarte', 'LM-006',
+ NULL, NULL, 'rio-celeste.jpg',
+ 222, 'Bijagua de Upala, Parque Nacional Volcán Tenorio', 'https://maps.app.goo.gl/rioceleste', 'https://waze.com/ul/rioceleste', 1),
+
+-- Restaurante Santa Teresa
+(7, 'Restaurante Santa Tere S.R.L.', 'Sabores de Santa Teresa', 3,
+ 'Gastronomía costarricense con mariscos frescos y vista al océano Pacífico.', '2640-0007', 'reservas@santatere.com',
+ 'Jurídica', '3107123456', 'Sofia Salas', 'LM-007',
+ NULL, NULL, 'santa-tere.jpg',
+ 407, 'Santa Teresa, Cóbano, frente a la playa', 'https://maps.app.goo.gl/santateresa', 'https://waze.com/ul/santateresa', 1),
+
+-- Comercio Genérico San José
+(7, 'Comercio TicoTrips S.A.', 'Servicios Turísticos CR', 6,
+ 'Servicios varios para turistas: alquiler de equipo, información turística y más.', '2222-0008', 'info@ticotrips.com',
+ 'Jurídica', '3108123456', 'Sofia Salas', 'LM-008',
+ NULL, NULL, 'placeholder.jpg',
+ 1, 'San José, Centro, Avenida Central', 'https://maps.app.goo.gl/sanjose', 'https://waze.com/ul/sanjose', 1),
+
+-- ####################################################################
+-- #         NEGOCIOS ADICIONALES (1 por provincia faltante)
+-- ####################################################################
+
+-- GUANACASTE - Restaurante Liberia
+(7, 'Restaurante El Sabanero S.A.', 'Restaurante El Sabanero', 3,
+ 'Comida típica guanacasteca con gallos, sopas y carnes a la parrilla en ambiente familiar.', '2666-0009', 'contacto@elsabanero.com',
+ 'Jurídica', '3109123456', 'Sofia Salas', 'LM-009',
+ NULL, NULL, 'santa-tere.jpg',
+ 336, 'Liberia centro, 100m este del parque', 'https://maps.app.goo.gl/liberia', 'https://waze.com/ul/liberia', 1),
+
+-- LIMÓN - Tour Cahuita
+(8, 'Cahuita Tours & Snorkel', 'Aventuras Cahuita', 2,
+ 'Tours de snorkel en el arrecife de coral y caminatas por el Parque Nacional Cahuita.', '2755-0010', 'tours@cahuitaadventures.com',
+ 'Jurídica', '3110123456', 'Carlos Duarte', 'LM-010',
+ NULL, NULL, 'puerto-viejo.jpg',
+ 480, 'Cahuita, frente a la entrada del parque nacional', 'https://maps.app.goo.gl/cahuita', 'https://waze.com/ul/cahuita', 1);

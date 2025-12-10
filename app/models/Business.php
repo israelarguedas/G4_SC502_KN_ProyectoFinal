@@ -217,4 +217,69 @@ class Business {
             return null;
         }
     }
+
+    public function searchBusinesses($filters) {
+        try {
+            $sql = "SELECT DISTINCT n.*, u.provincia, u.canton, u.distrito, 
+                           c.nombre_categoria
+                    FROM negocios n
+                    JOIN ubicaciones u ON n.id_ubicacion_fk = u.id_ubicacion
+                    LEFT JOIN categorias c ON n.id_categoria_fk = c.id_categoria
+                    WHERE n.id_estatus = 1"; // Solo negocios activos
+            
+            $params = [];
+            
+            // Filtrar por provincia
+            if (!empty($filters['provincia'])) {
+                $sql .= " AND u.provincia = ?";
+                $params[] = $filters['provincia'];
+            }
+            
+            // Filtrar por cantón
+            if (!empty($filters['canton'])) {
+                $sql .= " AND u.canton = ?";
+                $params[] = $filters['canton'];
+            }
+            
+            // Filtrar por distrito
+            if (!empty($filters['distrito'])) {
+                $sql .= " AND u.distrito = ?";
+                $params[] = $filters['distrito'];
+            }
+            
+            // Filtrar por categoría
+            if (!empty($filters['categoria'])) {
+                $sql .= " AND c.nombre_categoria = ?";
+                $params[] = $filters['categoria'];
+            }
+            
+            $sql .= " ORDER BY n.nombre_publico";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            Logger::error("Error buscando negocios: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getFeaturedBusinesses($limit = 10) {
+        try {
+            $sql = "SELECT n.*, u.provincia, u.canton, u.distrito, c.nombre_categoria
+                    FROM negocios n
+                    JOIN ubicaciones u ON n.id_ubicacion_fk = u.id_ubicacion
+                    LEFT JOIN categorias c ON n.id_categoria_fk = c.id_categoria
+                    WHERE n.id_estatus = 1
+                    ORDER BY n.id_negocio DESC
+                    LIMIT ?";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$limit]);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo negocios destacados: " . $e->getMessage());
+            return [];
+        }
+    }
 }

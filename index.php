@@ -20,7 +20,8 @@ $controllerMap = [
     'profile' => 'ProfileController',
     'business' => 'BusinessController',
     'reservation' => 'ReservationController',
-    'admin' => 'AdminController'
+    'admin' => 'AdminController',
+    'search' => 'SearchController'
 ];
 
 // Mapeo de acciones especiales (sin controlador específico)

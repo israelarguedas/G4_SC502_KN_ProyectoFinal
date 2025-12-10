@@ -33,3 +33,11 @@
 [2025-12-10 08:17:18] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
 [2025-12-10 08:19:36] [ERROR] Error obteniendo estadísticas de reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
 [2025-12-10 08:19:36] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:45:38] [ERROR] Error en routing: Acción no encontrada: view en BusinessController
+[2025-12-10 11:54:09] [ERROR] Error obteniendo estadísticas de reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:54:09] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:55:41] [ERROR] Error obteniendo estadísticas de reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:55:41] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:55:43] [ERROR] Error obteniendo estadísticas de reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:55:43] [ERROR] Error obteniendo estadísticas generales: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
+[2025-12-10 11:57:12] [ERROR] Error obteniendo reservaciones: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tico_trips_db.reservaciones' doesn't exist
