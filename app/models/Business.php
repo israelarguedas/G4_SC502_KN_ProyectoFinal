@@ -318,5 +318,226 @@ class Business {
             return [];
         }
     }
+
+    public function getAllServices($businessId) {
+        try {
+            $sql = "SELECT s.*, c.nombre_categoria
+                    FROM servicios s
+                    LEFT JOIN categorias c ON s.id_categoria_fk = c.id_categoria
+                    WHERE s.id_negocio_fk = ?
+                    ORDER BY s.id_estatus DESC, s.id_servicio DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$businessId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo servicios: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function createService($data) {
+        try {
+            $stmt = $this->pdo->prepare("
+                INSERT INTO servicios (
+                    id_negocio_fk, id_categoria_fk, nombre_servicio,
+                    descripcion, precio_base, id_estatus
+                ) VALUES (
+                    :id_negocio, :id_categoria, :nombre,
+                    :descripcion, :precio, 1
+                )
+            ");
+
+            $result = $stmt->execute([
+                'id_negocio' => $data['id_negocio_fk'],
+                'id_categoria' => $data['id_categoria_fk'] ?? null,
+                'nombre' => $data['nombre_servicio'],
+                'descripcion' => $data['descripcion'],
+                'precio' => $data['precio_base']
+            ]);
+
+            if ($result) {
+                Logger::info("Servicio creado para negocio: " . $data['id_negocio_fk']);
+                return ['success' => true, 'message' => 'Servicio creado exitosamente'];
+            }
+
+            return ['success' => false, 'message' => 'Error al crear servicio'];
+        } catch (PDOException $e) {
+            Logger::error("Error creando servicio: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error en la base de datos'];
+        }
+    }
+
+    public function updateService($serviceId, $data) {
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE servicios SET
+                    nombre_servicio = :nombre,
+                    descripcion = :descripcion,
+                    precio_base = :precio,
+                    id_categoria_fk = :id_categoria
+                WHERE id_servicio = :id_servicio
+            ");
+
+            $result = $stmt->execute([
+                'nombre' => $data['nombre_servicio'],
+                'descripcion' => $data['descripcion'],
+                'precio' => $data['precio_base'],
+                'id_categoria' => $data['id_categoria_fk'] ?? null,
+                'id_servicio' => $serviceId
+            ]);
+
+            if ($result) {
+                Logger::info("Servicio actualizado: " . $serviceId);
+                return ['success' => true, 'message' => 'Servicio actualizado exitosamente'];
+            }
+
+            return ['success' => false, 'message' => 'Error al actualizar servicio'];
+        } catch (PDOException $e) {
+            Logger::error("Error actualizando servicio: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error en la base de datos'];
+        }
+    }
+
+    public function deleteService($serviceId) {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE servicios SET id_estatus = 4 WHERE id_servicio = ?");
+            $stmt->execute([$serviceId]);
+
+            Logger::info("Servicio eliminado: " . $serviceId);
+            return ['success' => true, 'message' => 'Servicio eliminado exitosamente'];
+        } catch (PDOException $e) {
+            Logger::error("Error eliminando servicio: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error en la base de datos'];
+        }
+    }
+
+    public function getBusinessStats($businessId) {
+        try {
+            $stats = [];
+
+            // Total de servicios
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM servicios WHERE id_negocio_fk = ? AND id_estatus = 1");
+            $stmt->execute([$businessId]);
+            $stats['total_servicios'] = $stmt->fetchColumn();
+
+            // Total de cupones activos
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM cupones_b2b WHERE id_negocio_fk = ? AND id_estatus = 1 AND fecha_fin >= CURDATE()");
+            $stmt->execute([$businessId]);
+            $stats['cupones_activos'] = $stmt->fetchColumn();
+
+            // Total de reservas
+            $stmt = $this->pdo->prepare("
+                SELECT COUNT(*) as total FROM reservas r
+                JOIN servicios s ON r.id_servicio_fk = s.id_servicio
+                WHERE s.id_negocio_fk = ?
+            ");
+            $stmt->execute([$businessId]);
+            $stats['total_reservas'] = $stmt->fetchColumn();
+
+            // Ingresos totales
+            $stmt = $this->pdo->prepare("
+                SELECT COALESCE(SUM(r.monto_total), 0) as ingresos FROM reservas r
+                JOIN servicios s ON r.id_servicio_fk = s.id_servicio
+                WHERE s.id_negocio_fk = ?
+            ");
+            $stmt->execute([$businessId]);
+            $stats['ingresos_totales'] = $stmt->fetchColumn();
+
+            // Reservas próximas (próximos 7 días)
+            $stmt = $this->pdo->prepare("
+                SELECT COUNT(*) as total FROM reservas r
+                JOIN servicios s ON r.id_servicio_fk = s.id_servicio
+                WHERE s.id_negocio_fk = ?
+                AND r.fecha_reserva BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+            ");
+            $stmt->execute([$businessId]);
+            $stats['proximas_reservas'] = $stmt->fetchColumn();
+
+            return $stats;
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo estadísticas: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getReservationsByBusinessId($businessId, $limit = 10) {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT r.*, s.nombre_servicio, u.nombre, u.correo
+                FROM reservas r
+                JOIN servicios s ON r.id_servicio_fk = s.id_servicio
+                JOIN usuarios u ON r.id_usuario_fk = u.id_usuario
+                WHERE s.id_negocio_fk = ?
+                ORDER BY r.fecha_reserva DESC
+                LIMIT ?
+            ");
+            $stmt->execute([$businessId, $limit]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo reservas: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function updateCoupon($couponId, $data) {
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE cupones_b2b SET
+                    codigo_cupon = :codigo,
+                    tipo_descuento = :tipo_descuento,
+                    valor_descuento = :valor_descuento,
+                    fecha_inicio = :fecha_inicio,
+                    fecha_fin = :fecha_fin,
+                    usos_restantes = :usos_restantes,
+                    id_estatus = :id_estatus
+                WHERE id_cupon = :id_cupon
+            ");
+
+            $result = $stmt->execute([
+                'codigo' => $data['codigo_cupon'],
+                'tipo_descuento' => $data['tipo_descuento'],
+                'valor_descuento' => $data['valor_descuento'],
+                'fecha_inicio' => $data['fecha_inicio'],
+                'fecha_fin' => $data['fecha_fin'],
+                'usos_restantes' => $data['usos_restantes'] ?? null,
+                'id_estatus' => $data['id_estatus'],
+                'id_cupon' => $couponId
+            ]);
+
+            if ($result) {
+                Logger::info("Cupón actualizado: " . $couponId);
+                return ['success' => true, 'message' => 'Cupón actualizado exitosamente'];
+            }
+
+            return ['success' => false, 'message' => 'Error al actualizar cupón'];
+        } catch (PDOException $e) {
+            Logger::error("Error actualizando cupón: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error en la base de datos'];
+        }
+    }
+
+    public function deleteCoupon($couponId) {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE cupones_b2b SET id_estatus = 4 WHERE id_cupon = ?");
+            $stmt->execute([$couponId]);
+
+            Logger::info("Cupón eliminado: " . $couponId);
+            return ['success' => true, 'message' => 'Cupón eliminado exitosamente'];
+        } catch (PDOException $e) {
+            Logger::error("Error eliminando cupón: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error en la base de datos'];
+        }
+    }
+
+    public function getCategories() {
+        try {
+            $stmt = $this->pdo->query("SELECT id_categoria, nombre_categoria FROM categorias ORDER BY nombre_categoria");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            Logger::error("Error obteniendo categorías: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 
