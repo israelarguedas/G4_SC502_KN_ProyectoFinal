@@ -59,7 +59,8 @@ class AdminController {
             $_SESSION['error'] = 'Error al aprobar el negocio';
         }
 
-        $this->redirect('index.php?controller=admin&action=businesses');
+        // Redirigir al dashboard para ver los cambios
+        $this->redirect('index.php?controller=admin&action=index'); 
     }
 
     public function rejectBusiness() {
@@ -90,7 +91,8 @@ class AdminController {
             $_SESSION['error'] = 'Error al rechazar el negocio';
         }
 
-        $this->redirect('index.php?controller=admin&action=businesses');
+        // Redirigir al dashboard para ver los cambios
+        $this->redirect('index.php?controller=admin&action=index');
     }
 
     public function reservations() {

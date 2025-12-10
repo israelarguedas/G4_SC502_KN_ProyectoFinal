@@ -120,6 +120,12 @@ FOREIGN KEY (`id_ubicacion_fk`) REFERENCES `ubicaciones`(`id_ubicacion`),
 FOREIGN KEY (`id_estatus`) REFERENCES `estatus`(`id_estatus`)
 ) ENGINE=InnoDB;
 
+ALTER TABLE `negocios` 
+ADD COLUMN `motivo_rechazo` TEXT NULL AFTER `fecha_solicitud`;
+
+ALTER TABLE `negocios` 
+ADD COLUMN `fecha_aprobacion` TIMESTAMP NULL AFTER `fecha_solicitud`;
+
 -- 10. Tabla de Servicios/Productos (Ofrendas del negocio)
 CREATE TABLE `servicios` (
 `id_servicio` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

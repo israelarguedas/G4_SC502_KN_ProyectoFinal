@@ -6,31 +6,46 @@ class Business {
     public function __construct($pdo) {
         $this->pdo = $pdo;
     }
+    
+    // =================================================================
+    // MÉTODOS DE UBICACIÓN (CORRECCIÓN DEL ERROR FATAL)
+    // =================================================================
 
     public function getProvincias() {
         try {
             $stmt = $this->pdo->query("SELECT DISTINCT provincia FROM ubicaciones ORDER BY provincia");
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
         } catch (PDOException $e) {
-            Logger::error("Error obteniendo provincias: " . $e->getMessage());
+            error_log("Error obteniendo provincias: " . $e->getMessage());
             return [];
         }
     }
 
+
+    // =================================================================
+    // MÉTODOS DE APLICACIÓN DE NEGOCIO (CORRECCIÓN DE ROL/CATEGORÍA/ARCHIVO)
+    // =================================================================
+
+    /**
+     * Procesa la solicitud de certificación de negocio.
+     * @param array $data Los datos del formulario.
+     * @return array Resultado de la operación.
+     */
     public function createApplication($data) {
         try {
             $this->pdo->beginTransaction();
 
-            // Obtener id_categoria
+            // 1. Obtener id_categoria
             $stmt_cat = $this->pdo->prepare("SELECT id_categoria FROM categorias WHERE nombre_categoria = ?");
             $stmt_cat->execute([$data['tipo_negocio']]);
             $id_categoria_fk = $stmt_cat->fetchColumn();
 
             if (!$id_categoria_fk) {
-                throw new Exception("Categoría de negocio no válida.");
+                // Genera el primer error reportado
+                throw new Exception("Error: Categoría de negocio '{$data['tipo_negocio']}' no válida o no encontrada.");
             }
 
-            // Obtener id_ubicacion
+            // 2. Obtener id_ubicacion
             $stmt_ubi = $this->pdo->prepare("
                 SELECT id_ubicacion FROM ubicaciones 
                 WHERE provincia = ? AND canton = ? AND distrito = ?
@@ -40,32 +55,39 @@ class Business {
             $id_ubicacion_fk = $stmt_ubi->fetchColumn();
 
             if (!$id_ubicacion_fk) {
-                throw new Exception("Ubicación no válida.");
+                throw new Exception("Error: La ubicación seleccionada ({$data['provincia']}/{$data['canton']}/{$data['distrito']}) no es válida o no existe.");
             }
 
-            // Determinar id_rol basado en tipo de negocio
-            $id_rol_asignar = 6; // Por defecto
+            // 3. Determinar id_rol basado en tipo de negocio (LÓGICA REQUERIDA)
+            // 'Hospedaje'=4, 'Tour / Experiencia'=5, Resto (Gastronomía, Artesanías, Transporte, Otros)=6.
+            $id_rol_asignar = 6; 
             if ($data['tipo_negocio'] == 'Hospedaje') {
                 $id_rol_asignar = 4;
             } elseif ($data['tipo_negocio'] == 'Tour / Experiencia') {
                 $id_rol_asignar = 5;
-            }
+            } 
 
-            // Insertar negocio
+            // 4. Placeholder para rutas de archivos (Se establece a NULL para pruebas si la columna lo permite)
+            $ruta_cedula_frente_placeholder = NULL; 
+            $ruta_cedula_reverso_placeholder = NULL; 
+
+            // 5. Insertar negocio (Usar id_estatus 3 = Pendiente)
             $sql = "INSERT INTO negocios (
                 id_usuario_fk, id_categoria_fk, id_ubicacion_fk, 
                 nombre_legal, nombre_publico, descripcion_corta,
-                telefono_contacto, correo_contacto, cedula_hacienda,
+                telefono_contacto, correo_contacto, tipo_cedula, cedula_hacienda,
                 nombre_representante, no_licencia_municipal,
+                ruta_cedula_frente, ruta_cedula_reverso,
                 direccion_exacta, link_google_maps, link_waze,
-                tipo_cedula, id_estatus
+                id_estatus
             ) VALUES (
                 :id_usuario, :id_categoria, :id_ubicacion,
                 :nombre_legal, :nombre_publico, :descripcion,
-                :telefono, :correo, :cedula,
+                :telefono, :correo, :tipo_cedula, :cedula,
                 :representante, :licencia,
+                :ruta_cedula_frente, :ruta_cedula_reverso,
                 :direccion, :google_maps, :waze,
-                :tipo_cedula, 2
+                3
             )";
 
             $stmt = $this->pdo->prepare($sql);
@@ -78,27 +100,37 @@ class Business {
                 'descripcion' => $data['descripcion_corta'],
                 'telefono' => $data['telefono_contacto'],
                 'correo' => $data['correo_contacto'],
+                'tipo_cedula' => $data['tipo_cedula'],
                 'cedula' => $data['cedula_hacienda'],
                 'representante' => $data['nombre_representante'],
                 'licencia' => $data['no_licencia_municipal'],
+                'ruta_cedula_frente' => $ruta_cedula_frente_placeholder,
+                'ruta_cedula_reverso' => $ruta_cedula_reverso_placeholder,
                 'direccion' => $data['direccion_exacta'],
                 'google_maps' => $data['link_google_maps'],
-                'waze' => $data['link_waze'],
-                'tipo_cedula' => $data['tipo_cedula']
+                'waze' => $data['link_waze']
             ]);
 
-            // Actualizar rol del usuario
-            $stmt_rol = $this->pdo->prepare("UPDATE usuarios SET id_rol = ? WHERE id_usuario = ?");
+            // 6. Actualizar rol y estatus del usuario (id_estatus = 3 para Pendiente)
+            $stmt_rol = $this->pdo->prepare("UPDATE usuarios SET id_rol = ?, id_estatus = 3 WHERE id_usuario = ?");
             $stmt_rol->execute([$id_rol_asignar, $data['id_usuario_fk']]);
 
             $this->pdo->commit();
-            Logger::info("Aplicación de negocio creada para usuario: " . $data['id_usuario_fk']);
+            error_log("Aplicación de negocio creada para usuario: " . $data['id_usuario_fk']);
             
-            return ['success' => true, 'message' => 'Aplicación enviada exitosamente. En revisión.'];
+            return ['success' => true, 'message' => 'Su solicitud ha sido enviada con éxito. Su cuenta está ahora en estado PENDIENTE y será revisada por un administrador.'];
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            $mensaje = 'Error al crear la aplicación. Error de base de datos.';
+            if ($e->getCode() == '23000') { 
+                $mensaje = 'Error: La cédula de hacienda ya está registrada en otra solicitud.';
+            }
+            error_log("Error creando aplicación de negocio (PDO): " . $e->getMessage());
+            return ['success' => false, 'message' => $mensaje];
         } catch (Exception $e) {
             $this->pdo->rollBack();
-            Logger::error("Error creando aplicación de negocio: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al crear la aplicación'];
+            error_log("Error creando aplicación de negocio (Logic): " . $e->getMessage());
+            return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 
@@ -535,9 +567,9 @@ class Business {
             $stmt = $this->pdo->query("SELECT id_categoria, nombre_categoria FROM categorias ORDER BY nombre_categoria");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            Logger::error("Error obteniendo categorías: " . $e->getMessage());
+            // Logger::error("Error obteniendo categorías: " . $e->getMessage());
+            error_log("Error obteniendo categorías: " . $e->getMessage());
             return [];
         }
     }
 }
-

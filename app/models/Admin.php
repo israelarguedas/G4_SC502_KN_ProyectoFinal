@@ -15,7 +15,7 @@ class Admin {
                 JOIN usuarios u ON n.id_usuario_fk = u.id_usuario
                 JOIN ubicaciones ub ON n.id_ubicacion_fk = ub.id_ubicacion
                 JOIN categorias c ON n.id_categoria_fk = c.id_categoria
-                WHERE n.id_estatus = 2
+                WHERE n.id_estatus = 3 -- CORRECCIÓN: Buscar estatus Pendiente (3)
                 ORDER BY n.fecha_solicitud DESC
             ");
             $stmt->execute();
@@ -75,7 +75,7 @@ class Admin {
             // Actualizar estado del negocio a Rechazado (4)
             $stmt = $this->pdo->prepare("
                 UPDATE negocios 
-                SET id_estatus = 4, motivo_rechazo = ? 
+                SET id_estatus = 4, motivo_rechazo = ? -- Estatus 4 para Rechazado
                 WHERE id_negocio = ?
             ");
             $stmt->execute([$reason, $businessId]);
@@ -113,8 +113,8 @@ class Admin {
             $stmt = $this->pdo->query("
                 SELECT 
                     COUNT(*) as total_reservaciones,
-                    SUM(CASE WHEN id_estatus = 1 THEN 1 ELSE 0 END) as pendientes,
-                    SUM(CASE WHEN id_estatus = 2 THEN 1 ELSE 0 END) as confirmadas,
+                    SUM(CASE WHEN id_estatus = 3 THEN 1 ELSE 0 END) as pendientes, -- Asumiendo 3 es Pendiente Pago
+                    SUM(CASE WHEN id_estatus = 2 THEN 1 ELSE 0 END) as confirmadas, -- Asumiendo 2 es Confirmada
                     SUM(CASE WHEN YEAR(fecha_reserva) = YEAR(CURDATE()) THEN 1 ELSE 0 END) as anuales
                 FROM reservas
             ");
@@ -184,8 +184,9 @@ class Admin {
 
     public function getPopularBusinesses($limit = 5) {
         try {
+            // Se debe corregir id_reservacion a id_reserva
             $stmt = $this->pdo->prepare("
-                SELECT n.nombre_publico, COUNT(r.id_reservacion) as total_reservas
+                SELECT n.nombre_publico, COUNT(r.id_reserva) as total_reservas
                 FROM negocios n
                 JOIN servicios s ON n.id_negocio = s.id_negocio_fk
                 LEFT JOIN reservas r ON s.id_servicio = r.id_servicio_fk

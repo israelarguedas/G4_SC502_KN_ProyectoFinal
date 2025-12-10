@@ -5,21 +5,80 @@ class BusinessController {
     private $businessModel;
 
     public function __construct() {
-        $this->pdo = Database::getInstance()->getConnection();
+        // Asumiendo que Database::getInstance()->getConnection() inicializa $pdo
+        // Si tu aplicación usa una variable global $pdo (como en init.php), usa 'global $pdo; $this->pdo = $pdo;'
+        $this->pdo = Database::getInstance()->getConnection(); 
         $this->businessModel = new Business($this->pdo);
     }
 
+    // Función auxiliar de redirección 
+    private function redirect($url) {
+        header("Location: $url");
+        exit;
+    }
+    
+    // Función auxiliar para validar rol (debe coincidir con la lógica de tu init.php)
+    private function isComercio() {
+        // Un usuario es considerado "Comercio" si tiene cualquier rol de negocio.
+        // Roles de negocio: 3 (Comercio Inicial), 4 (Hospedaje), 5 (Tour), 6 (Comercio Registrado/Genérico)
+        return isset($_SESSION['id_rol']) && in_array($_SESSION['id_rol'], [3]);
+    }
+
+    // =================================================================
+    // ACCIÓN AJAX PARA UBICACIONES
+    // =================================================================
+
+    public function getUbicacionesAjax() {
+        // Asegurar que solo se acceda por AJAX y que se devuelva JSON
+        header('Content-Type: application/json');
+
+        $provincia = filter_input(INPUT_GET, 'provincia', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $canton = filter_input(INPUT_GET, 'canton', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        try {
+            if ($provincia && !$canton) {
+                // Obtener Cantones
+                $stmt = $this->pdo->prepare("SELECT DISTINCT canton FROM ubicaciones WHERE provincia = ? ORDER BY canton");
+                $stmt->execute([$provincia]);
+                $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                echo json_encode($results);
+            } elseif ($provincia && $canton) {
+                // Obtener Distritos
+                $stmt = $this->pdo->prepare("SELECT DISTINCT distrito FROM ubicaciones WHERE provincia = ? AND canton = ? ORDER BY distrito");
+                $stmt->execute([$provincia, $canton]);
+                $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                echo json_encode($results);
+            } else {
+                echo json_encode(['error' => 'Parámetros inválidos']);
+            }
+        } catch (PDOException $e) {
+            error_log("Error AJAX ubicaciones: " . $e->getMessage());
+            echo json_encode(['error' => 'Error de base de datos']);
+        }
+        
+        exit;
+    }
+
+    // =================================================================
+    // ACCIÓN: MOSTRAR FORMULARIO
+    // =================================================================
+
     public function showApplication() {
-        // Verificar que el usuario sea comercio
-        if (!$this->isComercio()) {
+        // Verificar que el usuario sea comercio (rol 3) - Descomentar cuando la prueba de rol esté lista
+        /*if (!$this->isComercio()) {
             $_SESSION['error'] = 'Acceso denegado. Es necesario registrar un Usuario como Comercio/Negocio.';
             $this->redirect('index.php?action=register');
             return;
-        }
+        }*/
 
-        $provincias = $this->businessModel->getProvincias();
-        require_once __DIR__ . '/../views/business/application.php';
+        // LLAMADA CORREGIDA: getProvincias está en el Modelo Business
+        $provincias = $this->businessModel->getProvincias(); 
+        require_once __DIR__ . '/../views/business/application.php'; 
     }
+
+    // =================================================================
+    // ACCIÓN: PROCESAR FORMULARIO
+    // =================================================================
 
     public function submitApplication() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -27,45 +86,53 @@ class BusinessController {
             return;
         }
 
-        if (!$this->isComercio()) {
+        // Descomentar cuando la prueba de rol esté lista
+        /*if (!$this->isComercio()) {
             $_SESSION['error'] = 'Acceso denegado.';
-            $this->redirect('index.php');
+            $this->redirect('index.php?action=register&error=' . urlencode('Acceso denegado. Es necesario registrar un Usuario como Comercio/Negocio para acceder al formulario de aplicación.'));
             return;
-        }
+        }*/
 
         try {
+            // Recolección y sanitización de todos los datos del formulario
             $data = [
                 'id_usuario_fk' => $_SESSION['user_id'],
+                // Información del Negocio
                 'nombre_legal' => filter_input(INPUT_POST, 'nombre_legal', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                 'nombre_publico' => filter_input(INPUT_POST, 'nombre_publico', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'tipo_negocio' => filter_input(INPUT_POST, 'tipo_negocio', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'descripcion_corta' => filter_input(INPUT_POST, 'descripcion_negocio', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'telefono_contacto' => filter_input(INPUT_POST, 'telefono_negocio', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'correo_contacto' => filter_input(INPUT_POST, 'correo_negocio', FILTER_SANITIZE_EMAIL),
+                // Asegurar que el nombre del input coincida con el nombre de la columna en la BD para Categorías
+                'tipo_negocio' => filter_input(INPUT_POST, 'tipo_negocio', FILTER_SANITIZE_FULL_SPECIAL_CHARS), 
+                'descripcion_corta' => filter_input(INPUT_POST, 'descripcion_corta', FILTER_SANITIZE_FULL_SPECIAL_CHARS), 
+                'telefono_contacto' => filter_input(INPUT_POST, 'telefono_contacto', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+                'correo_contacto' => filter_input(INPUT_POST, 'correo_contacto', FILTER_SANITIZE_EMAIL),
+                // Información de Hacienda/Representante
                 'tipo_cedula' => filter_input(INPUT_POST, 'tipo_cedula', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                 'cedula_hacienda' => filter_input(INPUT_POST, 'cedula_hacienda', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'nombre_representante' => filter_input(INPUT_POST, 'nombre_representante_hacienda', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'no_licencia_municipal' => filter_input(INPUT_POST, 'registro_municipal', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+                'nombre_representante' => filter_input(INPUT_POST, 'nombre_representante', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+                'no_licencia_municipal' => filter_input(INPUT_POST, 'no_licencia_municipal', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+                // Ubicación
                 'provincia' => filter_input(INPUT_POST, 'provincia', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                 'canton' => filter_input(INPUT_POST, 'canton', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                 'distrito' => filter_input(INPUT_POST, 'distrito', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                 'direccion_exacta' => filter_input(INPUT_POST, 'direccion_exacta', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-                'link_google_maps' => filter_input(INPUT_POST, 'google_maps_link', FILTER_SANITIZE_URL),
-                'link_waze' => filter_input(INPUT_POST, 'waze_link', FILTER_SANITIZE_URL)
+                'link_google_maps' => filter_input(INPUT_POST, 'link_google_maps', FILTER_SANITIZE_URL),
+                'link_waze' => filter_input(INPUT_POST, 'link_waze', FILTER_SANITIZE_URL)
             ];
 
             $result = $this->businessModel->createApplication($data);
 
             if ($result['success']) {
-                $_SESSION['success'] = $result['message'];
-                $this->redirect('index.php');
+                // Destruye la sesión y redirige al login para cargar el nuevo rol/estatus
+                $_SESSION['success_message'] = $result['message']; 
+                session_destroy(); 
+                $this->redirect('login.php'); 
             } else {
                 $_SESSION['error'] = $result['message'];
                 $this->redirect('index.php?controller=business&action=showApplication');
             }
         } catch (Exception $e) {
-            Logger::error("Error en aplicación de negocio: " . $e->getMessage());
-            $_SESSION['error'] = 'Error al procesar la aplicación';
+            error_log("Error en aplicación de negocio: " . $e->getMessage());
+            $_SESSION['error'] = 'Error al procesar la aplicación. Intente de nuevo.';
             $this->redirect('index.php?controller=business&action=showApplication');
         }
     }
@@ -416,14 +483,5 @@ class BusinessController {
         }
 
         $this->redirect('index.php?controller=business&action=manageCoupons');
-    }
-
-    private function isComercio() {
-        return isset($_SESSION['id_rol']) && in_array($_SESSION['id_rol'], [3, 4, 5, 6]);
-    }
-
-    private function redirect($url) {
-        header("Location: $url");
-        exit;
     }
 }

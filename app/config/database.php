@@ -7,7 +7,7 @@ class Database {
     private $db_host = 'localhost';
     private $db_name = 'tico_trips_db';
     private $db_user = 'root';
-    private $db_pass = '';
+    private $db_pass = 'admin';
     private $db_charset = 'utf8mb4';
     private $db_port = 3306;
 
