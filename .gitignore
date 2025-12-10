@@ -1,0 +1,34 @@
+# Logs
+app/logs/
+*.log
+
+# PHP
+vendor/
+composer.phar
+composer.lock
+
+# Configuration files with sensitive data
+config/database.php
+.env
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.cache
+
+# User uploaded files (optional - comment out if you want to track these)
+# app/public/images/profiles/
+# app/public/uploads/
