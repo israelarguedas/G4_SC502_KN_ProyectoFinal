@@ -22,11 +22,11 @@
           class="flex-1 text-center text-sm text-gray-700"
           >Reservar</a
         >
-        <a
+        <!--<a
           href="index.php?controller=business&action=showPromotions"
           class="flex-1 text-center text-teal-600 font-semibold"
           >Cupones</a
-        >
+        >-->
         
         <?php if (isset($_SESSION['user_id']) && isset($_SESSION['id_rol']) && in_array($_SESSION['id_rol'], [3, 4, 5, 6])): ?>
         <a
@@ -56,12 +56,12 @@
                 >Reservar</a
               >
             </li>
-            <li>
+            <!--<li>
               <a
                 href="index.php?controller=business&action=showPromotions"
                 class="hover:text-teal-600 transition duration-150"
                 >Cupones</a
-              >
+              >-->
             </li>
             <?php if (isset($_SESSION['user_id']) && isset($_SESSION['id_rol']) && in_array($_SESSION['id_rol'], [3, 4, 5, 6])): ?>
             <li>
@@ -71,12 +71,12 @@
                 >Registrar Negocio</a
               >
             </li>
-            <li>
+            <!--<li>
               <a
                 href="index.php?controller=business&action=manageCoupons"
                 class="hover:text-teal-600 transition duration-150"
                 >Mis Cupones</a
-              >
+              >-->
             </li>
             <?php endif; ?>
             <?php if (isset($_SESSION['user_id'])): ?>
