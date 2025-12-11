@@ -184,7 +184,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </a>
         </div>
 
-        <div class="bg-white shadow rounded-lg p-6">
+       <!-- <div class="bg-white shadow rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                 <i class="fas fa-star text-yellow-500 mr-2"></i> Mis Reseñas
             </h3>
@@ -192,7 +192,7 @@ require_once __DIR__ . '/../layouts/header.php';
             <a href="#" class="text-teal-600 hover:text-teal-700 font-medium">
                 Ver todas <i class="fas fa-arrow-right ml-1"></i>
             </a>
-        </div>
+        </div>  -->
     </div>
 </main>
 
